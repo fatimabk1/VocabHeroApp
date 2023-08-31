@@ -8,13 +8,29 @@
 import SwiftUI
 
 struct FlashCard: View {
+    @Binding var card: TopicItem
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            RoundedRectangle(cornerRadius: 20)
+            .foregroundColor(.blue)
+            if card.isFaceUp {
+//                card.image
+                Text("bllllla")
+            } else {
+                Text(card.text ?? "empty")
+                    .font(.title)
+            }
+        }
+        .onTapGesture {
+            card.flip()
+        }
     }
 }
 
 struct FlashCard_Previews: PreviewProvider {
     static var previews: some View {
-        FlashCard()
+        let item = TopicItem(text: "cat", image: Image("cat"))
+        FlashCard(card: Binding.constant(item))
     }
 }
