@@ -9,35 +9,45 @@ import Foundation
 import SwiftUI
 
 class TopicManager: ObservableObject {
-    var id: UUID
-    @Published var topics: [Topic] = []
+    private var id = UUID()
+    // TODO:  make allTopics and currentTopics sets
+    private let allTopics: [Topic] = topicsList
+    var currentTopics: [Topic] = []
     
-    init(){
-        id = UUID()
-//        topics = topicsList
+    // init function creating the set of available topics Topic() from JSON file
+    
+    func addSet(_ topic: Topic){
+        currentTopics.append(topic)
+        topic.createFlashCards()
     }
     
-    func add(topic: Topic){
-        if !topics.contains(topic){
-            topics.append(topic)
+    func removeSet(_ topic: Topic){
+        if let index = currentTopics.firstIndex(of: topic) {
+            currentTopics.remove(at: index)
         }
+        topic.deleteFlashCards()
     }
     
-    func remove(topic: Topic){
-        if let index = topics.firstIndex(of: topic) {
-            topics.remove(at: index)
+    func removeAllSets(){
+        for t in currentTopics {
+            t.deleteFlashCards()
         }
+        currentTopics = []
     }
     
-    func clear(){
-        topics = []
+    func getAvailableTopics() -> [Topic]{
+        // TODO: return allTopics - currentTopics
+        return allTopics
     }
+    
+    
+    
 }
 
-var topicsList = [Topic(name: "North American Cat Breeds", image: Image("cat")),
-                  Topic(name: "Summer Blooms", image: Image("flower")),
-                  Topic(name: "Tropical Birds", image: Image("bird")),
-                  Topic(name: "Flags Around the World", image: Image("flag")),
-                  Topic(name: "Countries Around the Globe", image: Image("country"))]
+var topicsList = [Topic(name: "North American Cat Breeds", emoji: ""),
+                  Topic(name: "Summer Blooms", emoji: ""),
+                  Topic(name: "Tropical Birds", emoji: ""),
+                  Topic(name: "Flags Around the World", emoji: ""),
+                  Topic(name: "Countries Around the Globe", emoji: "")]
 
 

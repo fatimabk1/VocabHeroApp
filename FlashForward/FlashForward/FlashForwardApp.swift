@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct FlashForwardApp: App {
+    @StateObject var model = TopicManager()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(model)
         }
     }
 }

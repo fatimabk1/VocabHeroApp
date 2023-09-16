@@ -11,31 +11,20 @@ import SwiftUI
 
 struct TopicItem: Identifiable {
     var id: UUID
-    @State var text: String?
-    @State var image: Image?
-    @State var isFaceUp: Bool = false
+    var front: String?
+    var back: String?
     
-    init(text: String? = nil, image: Image? = nil) {
+    init(_ front: String? = nil, _ back: String? = nil) {
         self.id = UUID()
-        self.text = text
-        self.image = image
-    }
-    
-    func flip() {
-        self.isFaceUp.toggle()
-    }
-    
-    func reset() {
-        self.isFaceUp = false
+        self.front = front
+        self.back = back
     }
 }
 
-var item = TopicItem(text: "hi", image: Image("cat"))
 
 
-var topicItemList = [TopicItem(text: "cat", image: Image("cat")),
-                     TopicItem(text: "flower", image: Image("flower")),
-                     TopicItem(text: "country", image: Image("country")),
-                     TopicItem(text: "bird", image: Image("bird")),
-                     TopicItem(text: "country", image: Image("country")),
-                     TopicItem(text: "flag", image: Image("flag"))]
+var topicItemList = [TopicItem("cat", "a feline creature"),
+                     TopicItem("flower", "a blooming plant"),
+                     TopicItem("country", "a demarcated area on the globe"),
+                     TopicItem("bird", "a flying creature"),
+                     TopicItem("flag", "a flying cloth with colors representing a country")]

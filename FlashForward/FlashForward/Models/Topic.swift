@@ -6,37 +6,53 @@
 //
 
 import Foundation
-import SwiftUI
 
-struct Topic: Identifiable, Equatable {
+// TODO: make Hashable for storing in sets
+class Topic: Identifiable, Equatable, ObservableObject {
+    // topic details
     var id: UUID
     var name: String
-    @State var progress = 0
-    @State var total = 0
-    var image: Image?
-    var flashCards: [TopicItem]
+    var icon: String
     
-    init(name: String, image: Image?){
+    // set details
+    @Published var progress = 0
+    @Published var total = 0
+    @Published private(set) var flashCards: [TopicItem]
+    
+    init(name: String, emoji: String){
         self.id = UUID()
         self.name = name
-        self.image = image
+        self.icon = ""
         self.flashCards = []
     }
     
-    mutating func createFlashCards() {
+    init(name: String, emoji: String, makeFlashCards: Bool){
+        self.id = UUID()
+        self.name = name
+        self.icon = ""
+        self.flashCards = []
+        
+        if makeFlashCards { createFlashCards() }
+    }
+    
+    func createFlashCards(){
+        // TODO: read data in from JSON file
         for cat in catTypes{
-            self.flashCards.append(TopicItem(text: cat, image: nil))
+            flashCards.append(TopicItem(cat, "A feline creature with a pheontype of \(cat)"))
         }
+        total = flashCards.count
+    }
+    
+    func deleteFlashCards(){
+        flashCards = []
+        progress = 0
+        total = 0
     }
     
     static func ==(lhs: Topic, rhs: Topic) -> Bool{
         return lhs.id == rhs.id
     }
 }
-
-//let birdCards = [ForEach(birdTypes) {bird in TopicItem(text: bird, image: nil)}]
-//let birdTopic = Topic(name: "Birds", image: nil, flashCards: birdCards
-//})
 
 let catTypes = ["Domestic Shorthair", "Maine Coon", "Siamese", "Persian", "Bengal", "Ragdoll", "Sphynx", "Scottish Fold", "Abyssinian", "Burmese", "Russian Blue", "British Shorthair", "Savannah", "Manx", "Himalayan", "Turkish Van", "Cornish Rex", "American Shorthair", "Norwegian Forest Cat", "Egyptian Mau", "Oriental Shorthair", "Balinese", "Birman", "Chartreux", "Devon Rex", "Exotic Shorthair", "Japanese Bobtail", "Korat", "LaPerm", "Munchkin", "Ocicat", "Peterbald", "Pixiebob", "Selkirk Rex", "Singapura", "Somali", "Tonkinese", "Toyger", "Ukrainian Levkoy", "American Curl", "Australian Mist", "Chausie", "Cheetoh", "Donskoy", "Khao Manee", "Nebelung", "Serengeti"]
 

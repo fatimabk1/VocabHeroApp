@@ -9,70 +9,76 @@ import SwiftUI
 
 struct CurrentTopicsView: View {
     @EnvironmentObject var manager: TopicManager
+    @State var isPresented: Bool = false
     
     var body: some View {
         VStack{
             NavigationStack {
                 NavigationStack {
-                    if manager.topics.isEmpty{
-                        Text("Visit the Discover tab to add a new flash card set!")
-                            .font(.title)
-                            .multilineTextAlignment(.center)
-                            .padding()
+                    if manager.currentTopics.isEmpty{
+                        emptyStatePrompt()
                     } else {
-                        List(manager.topics) { topic in
-                            NavigationLink {
-                                FlashCardView(topic: topic)
-                            } label: {
-                                HStack {
-                                    Text(topic.name)
-                                    Spacer()
-                                    Text("Completed \(topic.progress)/\(topic.total)")
-                                    
-                                }
-                            }
-                        }
+                        displayCurrentTopics()
                     }
                 }
                 .navigationTitle("Current Learning")
                 .toolbar {
-                    Button(action: {
-                        manager.clear()
-                    }, label: {
-                        HStack{
-                            Spacer()
-                            Text("Delete All")
-                                .foregroundColor(.red)
-                                .multilineTextAlignment(.trailing)
-                        }.padding()
-                    })
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        presentAllTopicsButton(isPresented: $isPresented)
+                    }
                 }
             }
-            
         }
-        
+    }
 }
-        
-//        VStack{
-//            HStack{
-//                Text("My Current Learning")
-//                    .font(.title)
-//                    .fontWeight(.bold)
-//                    .padding()
-//                Spacer()
-//                Button{
-//                    Image("cat")
-//                } label: {
-//                    Image(systemName: "plus.circle")
-//                    .frame(width: 20, height: 20, alignment: .trailing)
-//                    .padding()
-//                }
-//            }
-//
-//            Spacer()
-//        }
-//    }
+
+
+struct emptyStatePrompt: View {
+    var body: some View {
+        Text("Visit the Discover tab to add a new flash card set!")
+            .font(.title)
+            .multilineTextAlignment(.center)
+            .padding()
+    }
 }
+
+struct displayCurrentTopics: View {
+    @EnvironmentObject var manager: TopicManager
+    
+    var body: some View {
+        List(manager.currentTopics) { topic in
+            NavigationLink {
+                FlashCardView(topic: topic)
+            } label: {
+                HStack {
+                    Text(topic.name)
+                    Spacer()
+                    Text("Completed \(topic.progress)/\(topic.total)")
+                    
+                }
+            }
+        }
+    }
+}
+
+struct presentAllTopicsButton: View {
+    @Binding var isPresented: Bool
+    
+    var body: some View {
+        Button(action: {
+            isPresented.toggle()
+        }, label: {
+            HStack{
+                Image(systemName: "plus.circle")
+                    .font(.body)
+            }.padding()
+        })
+        .sheet(isPresented: $isPresented) {
+            AllTopicsListView()
+        }
+    }
+}
+
 
 struct CurrentTopicsView_Previews: PreviewProvider {
     static var previews: some View {

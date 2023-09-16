@@ -61,6 +61,7 @@
 		0886F7672A907A1400D7E82C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0886F76A2A907A4600D7E82C /* Components */,
 				08DCEF4F2A906D6600160E4E /* ContentView.swift */,
 				0886F7682A907A3C00D7E82C /* CurrentTopicsView.swift */,
 				0886F7712A907ADC00D7E82C /* AllTopicsListView.swift */,
@@ -112,7 +113,6 @@
 			isa = PBXGroup;
 			children = (
 				0886F7772A907BB700D7E82C /* Models */,
-				0886F76A2A907A4600D7E82C /* Components */,
 				0886F7672A907A1400D7E82C /* Views */,
 				08DCEF4D2A906D6600160E4E /* FlashForwardApp.swift */,
 				08DCEF512A906D6900160E4E /* Assets.xcassets */,
