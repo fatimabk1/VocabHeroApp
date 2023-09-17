@@ -9,40 +9,84 @@ import SwiftUI
 
 struct AllTopicsListView: View {
     @EnvironmentObject var manager: TopicManager
-    
-    @State var multiSelection: Bool = false
-    @State private var selection = Set<Topic>()
-    
+    @State private(set) var selections: [Topic] = []
     @Binding var isPresented: Bool
     
     var body: some View {
        NavigationView {
-           List(manager.getAvailableTopics(), selection: $selection) { topic in
-               Text("\(topic.name)")
+           List {
+               Section(header: Text("Available Topics"), footer: Text("\(selections.count) topics selected")) {
+                   ForEach(manager.getAvailableTopics(), id: \.id) { topic in
+                       MultiSelectRow(topicTitle: topic.name, isSelected: self.selections.contains(topic)) {
+                           if selections.contains(topic) {
+                               selections.removeAll(where: { $0 == topic })
+                           } else {
+                               selections.append(topic)
+                           }
+                       }
+                   }
+               }
            }
-            .navigationTitle("Learn")
             .toolbar{
-                DoneButton(multiSelection: $multiSelection, isPresented: $isPresented)
+                ToolbarItem(placement: .navigationBarLeading) { CancelButton(isPresented: $isPresented)
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Spacer()
+                }
+                ToolbarItem(placement: .navigationBarTrailing) { SaveButton(selections: $selections, isPresented: $isPresented)
+                }
             }
         }
     }
 }
 
 
-struct DoneButton: View {
+struct MultiSelectRow: View {
+    let topicTitle: String
+    var isSelected: Bool
+    var action: () -> Void
+    
+    
+    var body: some View {
+        Button(action: self.action) {
+            HStack {
+                Text(topicTitle)
+                if isSelected {
+                    Spacer()
+                    Image(systemName: "checkmark")
+                }
+            }
+            .foregroundColor(.primary)
+        }
+
+    }
+}
+
+struct CancelButton: View {
+    @Binding var isPresented: Bool
+    var body: some View {
+        Button(role: .cancel) {
+            isPresented = false
+        } label : {
+            Text("Cancel")
+                .foregroundColor(.red)
+        }
+    }
+}
+
+struct SaveButton: View {
     @EnvironmentObject var manager: TopicManager
-    @Binding var multiSelection: Bool
+    @Binding var selections: [Topic]
     @Binding var isPresented: Bool
     
-    // TODO: implement multiselection
-//    var multiSelection: Set<UUID>
-    
     var body: some View{
-        Button{
-//            multiSelection.toggle()
+        Button {
+            for topic in selections {
+                manager.addSet(topic)
+            }
             isPresented = false
         } label: {
-            Image(systemName: multiSelection ? "checkmark.seal.fill" : "seal")
+            Text("Save")
         }
     }
 }
