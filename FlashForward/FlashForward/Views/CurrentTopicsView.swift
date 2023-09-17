@@ -12,10 +12,10 @@ struct CurrentTopicsView: View {
     @State var isPresented: Bool = false
     
     var body: some View {
-        VStack{
+        VStack {
             NavigationStack {
                 NavigationStack {
-                    if manager.currentTopics.isEmpty{
+                    if manager.getCurrentTopics().isEmpty {
                         emptyStatePrompt()
                     } else {
                         displayCurrentTopics()
@@ -32,7 +32,7 @@ struct CurrentTopicsView: View {
     }
 }
 
-
+// TODO: get a nicer looking empty state
 struct emptyStatePrompt: View {
     var body: some View {
         Text("Visit the Discover tab to add a new flash card set!")
@@ -46,7 +46,7 @@ struct displayCurrentTopics: View {
     @EnvironmentObject var manager: TopicManager
     
     var body: some View {
-        List(manager.currentTopics) { topic in
+        List(manager.getCurrentTopics()) { topic in
             NavigationLink {
                 FlashCardView(topic: topic)
             } label: {
@@ -55,9 +55,11 @@ struct displayCurrentTopics: View {
                     Spacer()
                     Text("Completed \(topic.progress)/\(topic.total)")
                     
-                }
+                }.frame(height: 70)
             }
         }
+        // TODO: fix list row height
+        .environment(\.defaultMinListRowHeight, 100)
     }
 }
 
@@ -74,7 +76,7 @@ struct presentAllTopicsButton: View {
             }.padding()
         })
         .sheet(isPresented: $isPresented) {
-            AllTopicsListView()
+            AllTopicsListView(isPresented: $isPresented)
         }
     }
 }
@@ -82,7 +84,7 @@ struct presentAllTopicsButton: View {
 
 struct CurrentTopicsView_Previews: PreviewProvider {
     static var previews: some View {
-        let manager : TopicManager = TopicManager()
+        @StateObject var manager : TopicManager = TopicManager()
         CurrentTopicsView()
             .environmentObject(manager)
     }

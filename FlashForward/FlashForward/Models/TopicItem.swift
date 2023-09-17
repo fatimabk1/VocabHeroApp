@@ -13,12 +13,17 @@ struct TopicItem: Identifiable {
     var id: UUID
     var front: String?
     var back: String?
+    var viewed: Bool
+    var tricky: Bool
     
     init(_ front: String? = nil, _ back: String? = nil) {
         self.id = UUID()
         self.front = front
         self.back = back
+        self.viewed = false
+        self.tricky = false
     }
+
 }
 
 

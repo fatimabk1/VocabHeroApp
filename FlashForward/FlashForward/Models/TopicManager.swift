@@ -11,37 +11,49 @@ import SwiftUI
 class TopicManager: ObservableObject {
     private var id = UUID()
     // TODO:  make allTopics and currentTopics sets
-    private let allTopics: [Topic] = topicsList
-    var currentTopics: [Topic] = []
+    private var topics: [Topic] = topicsList
+    
+    
+    /*
+     // topic lists needed:
+     - available topics (topic.learning == true )
+     - started topics (topic.learning == true && topic.progress == 0)
+     
+     // flash card (topic item) lists needed:
+     - viewed
+     - tricky
+     
+     
+     --> flash card reset / remove --> reset progress, viewed, and tricky
+     */
+    
     
     // init function creating the set of available topics Topic() from JSON file
     
-    func addSet(_ topic: Topic){
-        currentTopics.append(topic)
-        topic.createFlashCards()
+    func addSet(_ t: Topic) {
+        t.added = true
+        t.createFlashCards()
     }
     
-    func removeSet(_ topic: Topic){
-        if let index = currentTopics.firstIndex(of: topic) {
-            currentTopics.remove(at: index)
+    func removeSet(_ t: Topic) {
+        t.added = false
+        t.deleteFlashCards()
+    }
+    
+    func removeAllSets() {
+        for t in topics {
+            removeSet(t)
         }
-        topic.deleteFlashCards()
     }
     
-    func removeAllSets(){
-        for t in currentTopics {
-            t.deleteFlashCards()
-        }
-        currentTopics = []
+    func getAvailableTopics() -> [Topic] {
+        return topics.filter { !$0.added }
     }
     
-    func getAvailableTopics() -> [Topic]{
-        // TODO: return allTopics - currentTopics
-        return allTopics
+    func getCurrentTopics() -> [Topic] {
+        return topics.filter { $0.added }
     }
-    
-    
-    
+
 }
 
 var topicsList = [Topic(name: "North American Cat Breeds", emoji: ""),

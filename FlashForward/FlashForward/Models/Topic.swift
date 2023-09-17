@@ -7,12 +7,12 @@
 
 import Foundation
 
-// TODO: make Hashable for storing in sets
-class Topic: Identifiable, Equatable, ObservableObject {
+class Topic: Identifiable, Equatable, Hashable, ObservableObject {
     // topic details
     var id: UUID
     var name: String
     var icon: String
+    @Published var added: Bool
     
     // set details
     @Published var progress = 0
@@ -23,6 +23,7 @@ class Topic: Identifiable, Equatable, ObservableObject {
         self.id = UUID()
         self.name = name
         self.icon = ""
+        self.added = false
         self.flashCards = []
     }
     
@@ -30,6 +31,7 @@ class Topic: Identifiable, Equatable, ObservableObject {
         self.id = UUID()
         self.name = name
         self.icon = ""
+        self.added = true
         self.flashCards = []
         
         if makeFlashCards { createFlashCards() }
@@ -52,6 +54,19 @@ class Topic: Identifiable, Equatable, ObservableObject {
     static func ==(lhs: Topic, rhs: Topic) -> Bool{
         return lhs.id == rhs.id
     }
+    
+    func getAllFlashCards() -> [TopicItem] {
+        return flashCards
+    }
+    
+    func getTrickyFlashCards() -> [TopicItem] {
+        return flashCards.filter({ $0.tricky })
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
 }
 
 let catTypes = ["Domestic Shorthair", "Maine Coon", "Siamese", "Persian", "Bengal", "Ragdoll", "Sphynx", "Scottish Fold", "Abyssinian", "Burmese", "Russian Blue", "British Shorthair", "Savannah", "Manx", "Himalayan", "Turkish Van", "Cornish Rex", "American Shorthair", "Norwegian Forest Cat", "Egyptian Mau", "Oriental Shorthair", "Balinese", "Birman", "Chartreux", "Devon Rex", "Exotic Shorthair", "Japanese Bobtail", "Korat", "LaPerm", "Munchkin", "Ocicat", "Peterbald", "Pixiebob", "Selkirk Rex", "Singapura", "Somali", "Tonkinese", "Toyger", "Ukrainian Levkoy", "American Curl", "Australian Mist", "Chausie", "Cheetoh", "Donskoy", "Khao Manee", "Nebelung", "Serengeti"]

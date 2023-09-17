@@ -9,16 +9,20 @@ import SwiftUI
 
 struct AllTopicsListView: View {
     @EnvironmentObject var manager: TopicManager
-    @State var multiSelection = false
-
+    
+    @State var multiSelection: Bool = false
+    @State private var selection = Set<Topic>()
+    
+    @Binding var isPresented: Bool
+    
     var body: some View {
        NavigationView {
-            List(manager.getAvailableTopics()){
-                Text("\($0.name)")
-            }
-            .navigationTitle("Learn Something New!")
+           List(manager.getAvailableTopics(), selection: $selection) { topic in
+               Text("\(topic.name)")
+           }
+            .navigationTitle("Learn")
             .toolbar{
-                DoneButton(multiSelection: $multiSelection)
+                DoneButton(multiSelection: $multiSelection, isPresented: $isPresented)
             }
         }
     }
@@ -28,14 +32,15 @@ struct AllTopicsListView: View {
 struct DoneButton: View {
     @EnvironmentObject var manager: TopicManager
     @Binding var multiSelection: Bool
-    @Environment(\.dismiss) private var dismiss
+    @Binding var isPresented: Bool
     
+    // TODO: implement multiselection
 //    var multiSelection: Set<UUID>
     
     var body: some View{
         Button{
 //            multiSelection.toggle()
-            dismiss()
+            isPresented = false
         } label: {
             Image(systemName: multiSelection ? "checkmark.seal.fill" : "seal")
         }
@@ -44,9 +49,11 @@ struct DoneButton: View {
 
 struct AllTopicsListView_Previews: PreviewProvider {
     static var previews: some View {
-        let model = TopicManager()
-        AllTopicsListView()
-            .environmentObject(model)
+        @StateObject var manager = TopicManager()
+        @State var isPresented = false
+        
+        AllTopicsListView(isPresented: $isPresented)
+            .environmentObject(manager)
     }
 }
 
