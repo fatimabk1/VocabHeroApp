@@ -14,12 +14,25 @@ struct CurrentTopicsView: View {
     var body: some View {
         VStack {
             NavigationStack {
+//                NavigationStack {
+//                    if manager.getCurrentTopics().isEmpty {
+//                        emptyStatePrompt()
+//                    } else {
+//                        displayCurrentTopics()
+//                    }
+//                }
                 NavigationStack {
-                    if manager.getCurrentTopics().isEmpty {
-                        emptyStatePrompt()
-                    } else {
-                        displayCurrentTopics()
+//                    ForEach(manager.topics.filter({ $0.added })) { topic in
+//                        Text("\(topic.name)")
+//                    }
+                    Button {
+                        manager.addSet(manager.getAvailableTopics()[0])
+                    } label: {
+                        Text("Add Set")
                     }
+
+                    displayCurrentTopics()
+                    
                 }
                 .navigationTitle("Current Learning")
                 .toolbar {
@@ -46,20 +59,44 @@ struct displayCurrentTopics: View {
     @EnvironmentObject var manager: TopicManager
     
     var body: some View {
-        List(manager.getCurrentTopics()) { topic in
-            NavigationLink {
-                FlashCardView(topic: topic)
-            } label: {
-                HStack {
-                    Text(topic.name)
-                    Spacer()
-                    Text("Completed \(topic.progress)/\(topic.total)")
-                    
-                }.frame(height: 70)
-            }
+        // TODO: pass bindings via List and ForEach or find workaround
+        List($manager.topics) { $topic in
+            EditButton(topic: $topic)
+            Text("progress: \(topic.progress)")
+//            NavigationLink {
+//                FlashCardView(topic: $topic)
+//            } label: {
+//                HStack {
+//                    if let emoji = topic.emoji {
+//                        Text("\(emoji) ")
+//                            .font(.title)
+//                    }
+//
+//                    Text(topic.name)
+//
+//                    Spacer()
+//                    // TODO: Swap for progress indicator
+//                    Text("\(topic.progress)/\(topic.total)")
+//
+//                }
+//            }
         }
-        // TODO: fix list row height
-        .environment(\.defaultMinListRowHeight, 100)
+        .environment(\.defaultMinListRowHeight, 70)
+        .listStyle(.inset)
+    }
+}
+
+struct EditButton: View {
+    @Binding var topic: Topic
+    
+    var body: some View {
+        Button {
+            topic.progress = 20
+        } label: {
+            Text("Update Progress")
+                .foregroundColor(.blue)
+        }
+
     }
 }
 

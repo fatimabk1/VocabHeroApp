@@ -11,24 +11,28 @@ import SwiftUI
 class TopicManager: ObservableObject {
     private var id = UUID()
     // TODO:  make allTopics and currentTopics sets
-    private var topics: [Topic] = topicsList
+    @Published /*private*/ var topics: [Topic]
+    var currentTopics: [Topic] { topics.filter { $0.added } }
+    var availableTopics: [Topic] { topics.filter { !$0.added } }
     
+    init() {
+        self.topics = [Topic(name: "North American Cat Breeds", emoji: "🐈‍⬛"),
+                  Topic(name: "Summer Blooms", emoji: "🌸"),
+                  Topic(name: "Tropical Birds", emoji: "🦜"),
+                  Topic(name: "Flags Around the World", emoji: "🇺🇸"),
+                  Topic(name: "Countries Around the Globe", emoji: "🌍")]
+    }
     
-    /*
-     // topic lists needed:
-     - available topics (topic.learning == true )
-     - started topics (topic.learning == true && topic.progress == 0)
-     
-     // flash card (topic item) lists needed:
-     - viewed
-     - tricky
-     
-     
-     --> flash card reset / remove --> reset progress, viewed, and tricky
-     */
+    init(makeFlashCards: Bool = false) {
+        if makeFlashCards{
+        self.topics = [Topic(name: "North American Cat Breeds", emoji: "🐈‍⬛"),
+                  Topic(name: "Summer Blooms", emoji: "🌸"),
+                  Topic(name: "Tropical Birds", emoji: "🦜"),
+                  Topic(name: "Flags Around the World", emoji: "🇺🇸"),
+                  Topic(name: "Countries Around the Globe", emoji: "🌍")]
+    }
     
-    
-    // init function creating the set of available topics Topic() from JSON file
+    // TODO: init function creating the set of available topics Topic() from JSON file
     
     func addSet(_ t: Topic) {
         t.added = true
@@ -55,11 +59,3 @@ class TopicManager: ObservableObject {
     }
 
 }
-
-var topicsList = [Topic(name: "North American Cat Breeds", emoji: ""),
-                  Topic(name: "Summer Blooms", emoji: ""),
-                  Topic(name: "Tropical Birds", emoji: ""),
-                  Topic(name: "Flags Around the World", emoji: ""),
-                  Topic(name: "Countries Around the Globe", emoji: "")]
-
-
