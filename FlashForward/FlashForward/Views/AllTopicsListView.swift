@@ -17,7 +17,7 @@ struct AllTopicsListView: View {
            List {
                Section(header: Text("Available Topics"), footer: Text("\(selections.count) topics selected")) {
                    ForEach(manager.getAvailableTopics(), id: \.id) { topic in
-                       MultiSelectRow(topicTitle: topic.name, isSelected: self.selections.contains(topic)) {
+                       MultiSelectRow(topicTitle: topic.name, topicEmoji: topic.emoji, isSelected: self.selections.contains(topic)) {
                            if selections.contains(topic) {
                                selections.removeAll(where: { $0 == topic })
                            } else {
@@ -43,6 +43,7 @@ struct AllTopicsListView: View {
 
 struct MultiSelectRow: View {
     let topicTitle: String
+    let topicEmoji: String?
     var isSelected: Bool
     var action: () -> Void
     
@@ -50,6 +51,9 @@ struct MultiSelectRow: View {
     var body: some View {
         Button(action: self.action) {
             HStack {
+                if let emoji = topicEmoji {
+                    Text(emoji)
+                }
                 Text(topicTitle)
                 if isSelected {
                     Spacer()

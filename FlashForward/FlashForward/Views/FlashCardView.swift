@@ -9,39 +9,40 @@ import SwiftUI
 import VTabView
 
 struct FlashCardView: View {
-    @State var topic: Topic
-    @State private var pageIndex = 0
+    @Binding var topic: Topic
     
-    @State var showingAlert: Bool = false
-    
-    var count = 0
     var body: some View {
-
+        let flashcards = topic.flashCards
+        
         NavigationView {
             VStack{
-                VTabView(selection: $pageIndex) {
-                    ForEach(topic.getAllFlashCards()){ item in
-                        FlashCard(item: item)
-                            .tag(item.id)
+                VTabView() {
+                    ForEach(flashcards){ card in
+
+                        VStack{
+                            FlashCard(item: card)
+                                .tag(card.id)
+                                .onAppear() {
+                                    if !card.viewed {
+                                        if let c = flashcards.first(where: { $0.id == card.id }) {
+                                            c.viewed = true
+                                            topic.progress += 1
+                                        }
+                                    }
+                                }
+                            Text(card.viewed ? "Previously Viewed" : "New Card!")
+                            
+                        }
                    }
                 }
-                .onChange(of: pageIndex, perform: { index in
-                    // TODO: implement progress update
-                })
                 .tabViewStyle(PageTabViewStyle())
 
-                Text("Completed \(pageIndex)/\(topic.total)")
+                ProgressView("Completed \(topic.progress)/\(topic.total)", value: Double(topic.progress / topic.total))
+                    .padding(.horizontal)
+                Spacer()
 
             }
             .navigationTitle("\(topic.name)") // TODO: reduce font size
-            .toolbar {
-                Button("Check Progress") {
-                    showingAlert = true
-                }
-                .alert("Progress: \(pageIndex) / \(topic.total)", isPresented: $showingAlert) {
-                    Button("OK", role: .cancel) { }
-                }
-        }
         }
     }
 }
@@ -50,9 +51,8 @@ struct FlashCardView_Previews: PreviewProvider {
     
     static var previews: some View {
         @StateObject var manager = TopicManager()
-        let t = Topic(name: "North American Cat Breeds", emoji: "", makeFlashCards: true)
         
-        FlashCardView(topic: t)
+        FlashCardView(topic: $manager.topics[0])
             .environmentObject(manager)
     }
 }

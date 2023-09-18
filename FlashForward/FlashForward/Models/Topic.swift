@@ -11,30 +11,31 @@ class Topic: Identifiable, Equatable, Hashable, ObservableObject {
     // topic details
     var id: UUID
     var name: String
-    var icon: String
+    var emoji: String?
     @Published var added: Bool
     
     // set details
     @Published var progress = 0
     @Published var total = 0
-    @Published private(set) var flashCards: [TopicItem]
+    @Published var flashCards: [TopicItem]
     
-    init(name: String, emoji: String){
+    init(name: String, emoji: String? = nil, makeFlashCards: Bool = false){
         self.id = UUID()
         self.name = name
-        self.icon = ""
-        self.added = false
-        self.flashCards = []
-    }
-    
-    init(name: String, emoji: String, makeFlashCards: Bool){
-        self.id = UUID()
-        self.name = name
-        self.icon = ""
-        self.added = true
+        self.emoji = emoji
+        self.added = makeFlashCards ? true : false
         self.flashCards = []
         
         if makeFlashCards { createFlashCards() }
+    }
+    
+    func markCardAsViewed(card: TopicItem) {
+        if let index = flashCards.firstIndex(where: { $0.id == card.id }){
+            if !flashCards[index].viewed {
+                flashCards[index].viewed = true
+                progress += 1
+            }
+        }
     }
     
     func createFlashCards(){
