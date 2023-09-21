@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		087399132A9FC182004DF252 /* VTabView in Frameworks */ = {isa = PBXBuildFile; productRef = 087399122A9FC182004DF252 /* VTabView */; };
 		0886F7652A9078AF00D7E82C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCEF4F2A906D6600160E4E /* ContentView.swift */; };
 		0886F7692A907A3C00D7E82C /* CurrentTopicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F7682A907A3C00D7E82C /* CurrentTopicsView.swift */; };
 		0886F76C2A907A6100D7E82C /* TopicCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F76B2A907A6100D7E82C /* TopicCard.swift */; };
@@ -51,7 +50,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				087399132A9FC182004DF252 /* VTabView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,7 +144,6 @@
 			);
 			name = FlashForward;
 			packageProductDependencies = (
-				087399122A9FC182004DF252 /* VTabView */,
 			);
 			productName = FlashForward;
 			productReference = 08DCEF4A2A906D6600160E4E /* FlashForward.app */;
@@ -177,7 +174,6 @@
 			);
 			mainGroup = 08DCEF412A906D6600160E4E;
 			packageReferences = (
-				087399112A9FC182004DF252 /* XCRemoteSwiftPackageReference "swiftui-vertical-tab-view" */,
 			);
 			productRefGroup = 08DCEF4B2A906D6600160E4E /* Products */;
 			projectDirPath = "";
@@ -419,25 +415,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		087399112A9FC182004DF252 /* XCRemoteSwiftPackageReference "swiftui-vertical-tab-view" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-vertical-tab-view";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		087399122A9FC182004DF252 /* VTabView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 087399112A9FC182004DF252 /* XCRemoteSwiftPackageReference "swiftui-vertical-tab-view" */;
-			productName = VTabView;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 08DCEF422A906D6600160E4E /* Project object */;
 }
