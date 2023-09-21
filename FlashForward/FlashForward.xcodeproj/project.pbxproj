@@ -20,6 +20,7 @@
 		0886F77D2A907C0300D7E82C /* TopicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F77C2A907C0300D7E82C /* TopicManager.swift */; };
 		0886F77F2A96586F00D7E82C /* FlashCardEditable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F77E2A96586F00D7E82C /* FlashCardEditable.swift */; };
 		0886F7812A96588000D7E82C /* EditFlashCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F7802A96588000D7E82C /* EditFlashCardView.swift */; };
+		08BD7CF22AB8A3BF003BDD38 /* Playground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BD7CF12AB8A3BF003BDD38 /* Playground.swift */; };
 		08DCEF4E2A906D6600160E4E /* FlashForwardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCEF4D2A906D6600160E4E /* FlashForwardApp.swift */; };
 		08DCEF522A906D6900160E4E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08DCEF512A906D6900160E4E /* Assets.xcassets */; };
 		08DCEF552A906D6900160E4E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08DCEF542A906D6900160E4E /* Preview Assets.xcassets */; };
@@ -38,6 +39,7 @@
 		0886F77C2A907C0300D7E82C /* TopicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicManager.swift; sourceTree = "<group>"; };
 		0886F77E2A96586F00D7E82C /* FlashCardEditable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardEditable.swift; sourceTree = "<group>"; };
 		0886F7802A96588000D7E82C /* EditFlashCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFlashCardView.swift; sourceTree = "<group>"; };
+		08BD7CF12AB8A3BF003BDD38 /* Playground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playground.swift; sourceTree = "<group>"; };
 		08DCEF4A2A906D6600160E4E /* FlashForward.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashForward.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08DCEF4D2A906D6600160E4E /* FlashForwardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashForwardApp.swift; sourceTree = "<group>"; };
 		08DCEF4F2A906D6600160E4E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				0886F7782A907BC600D7E82C /* Topic.swift */,
 				0886F77A2A907BDE00D7E82C /* TopicItem.swift */,
 				0886F77C2A907C0300D7E82C /* TopicManager.swift */,
+				08BD7CF12AB8A3BF003BDD38 /* Playground.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -212,6 +215,7 @@
 				0886F76C2A907A6100D7E82C /* TopicCard.swift in Sources */,
 				0886F7792A907BC700D7E82C /* Topic.swift in Sources */,
 				0886F76E2A907A7100D7E82C /* TopicProgressCard.swift in Sources */,
+				08BD7CF22AB8A3BF003BDD38 /* Playground.swift in Sources */,
 				08DCEF4E2A906D6600160E4E /* FlashForwardApp.swift in Sources */,
 				0886F7692A907A3C00D7E82C /* CurrentTopicsView.swift in Sources */,
 				0886F7762A907B1800D7E82C /* EndFlashCardView.swift in Sources */,

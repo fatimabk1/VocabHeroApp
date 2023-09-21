@@ -6,18 +6,19 @@
 //
 
 import Foundation
+import SwiftUI
 
-class Topic: Identifiable, Equatable, Hashable, ObservableObject {
+struct Topic: Identifiable, Equatable, Hashable {
     // topic details
     var id: UUID
     var name: String
     var emoji: String?
-    @Published var added: Bool
+    var added: Bool
     
     // set details
-    @Published var progress = 0
-    @Published var total = 0
-    @Published var flashCards: [TopicItem]
+    var progress = 0
+    var total = 0
+    var flashCards: [TopicItem]
     
     init(name: String, emoji: String? = nil, makeFlashCards: Bool = false){
         self.id = UUID()
@@ -28,8 +29,11 @@ class Topic: Identifiable, Equatable, Hashable, ObservableObject {
         
         if makeFlashCards { createFlashCards() }
     }
+    mutating func incrementProgress(){
+        self.progress += 1
+    }
     
-    func markCardAsViewed(card: TopicItem) {
+    mutating func markCardAsViewed(_ card: TopicItem) {
         if let index = flashCards.firstIndex(where: { $0.id == card.id }){
             if !flashCards[index].viewed {
                 flashCards[index].viewed = true
@@ -38,7 +42,17 @@ class Topic: Identifiable, Equatable, Hashable, ObservableObject {
         }
     }
     
-    func createFlashCards(){
+    mutating func addToLearning(){
+        self.added = true
+        createFlashCards()
+    }
+    
+    mutating func removeFromLearning(){
+        self.added = false
+        deleteFlashCards()
+    }
+    
+    mutating func createFlashCards(){
         // TODO: read data in from JSON file
         for cat in catTypes{
             flashCards.append(TopicItem(cat, "A feline creature with a pheontype of \(cat)"))
@@ -46,7 +60,7 @@ class Topic: Identifiable, Equatable, Hashable, ObservableObject {
         total = flashCards.count
     }
     
-    func deleteFlashCards(){
+    mutating func deleteFlashCards(){
         flashCards = []
         progress = 0
         total = 0
@@ -54,14 +68,6 @@ class Topic: Identifiable, Equatable, Hashable, ObservableObject {
     
     static func ==(lhs: Topic, rhs: Topic) -> Bool{
         return lhs.id == rhs.id
-    }
-    
-    func getAllFlashCards() -> [TopicItem] {
-        return flashCards
-    }
-    
-    func getTrickyFlashCards() -> [TopicItem] {
-        return flashCards.filter({ $0.tricky })
     }
     
     func hash(into hasher: inout Hasher) {
