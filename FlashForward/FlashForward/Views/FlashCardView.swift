@@ -12,23 +12,25 @@ struct FlashCardView: View {
     @Binding var topic: Topic
     
     var body: some View {
-        let flashcards = topic.flashCards
+//        let flashcards = topic.flashCards
+        var progress: Double {
+            if (topic.total == 0){
+                return 0.0
+            } else {
+                return Double(topic.progress / topic.total)
+            }
+        }
         
         NavigationView {
             VStack{
                 VTabView() {
-                    ForEach(flashcards){ card in
-
+                    ForEach($topic.flashCards){ $card in
                         VStack{
                             FlashCard(item: card)
                                 .tag(card.id)
                                 .onAppear() {
-                                    if !card.viewed {
-                                        if let c = flashcards.first(where: { $0.id == card.id }) {
-                                            c.viewed = true
-                                            topic.progress += 1
-                                        }
-                                    }
+                                    card.viewed = true
+                                    topic.progress += 1
                                 }
                             Text(card.viewed ? "Previously Viewed" : "New Card!")
                             
@@ -36,11 +38,10 @@ struct FlashCardView: View {
                    }
                 }
                 .tabViewStyle(PageTabViewStyle())
-
-                ProgressView("Completed \(topic.progress)/\(topic.total)", value: Double(topic.progress / topic.total))
+                
+                ProgressView("Completed \(topic.progress)/\(topic.total)", value: progress)
                     .padding(.horizontal)
                 Spacer()
-
             }
             .navigationTitle("\(topic.name)") // TODO: reduce font size
         }

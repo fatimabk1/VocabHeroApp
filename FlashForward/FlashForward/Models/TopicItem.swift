@@ -9,12 +9,12 @@
 import Foundation
 import SwiftUI
 
-class TopicItem: Identifiable, ObservableObject {
+struct TopicItem: Identifiable {
     let id: UUID
     let front: String?
     let back: String?
-    @Published var viewed: Bool
-    @Published var tricky: Bool
+    var viewed: Bool
+    var tricky: Bool
     
     init(_ front: String? = nil, _ back: String? = nil) {
         self.id = UUID()
@@ -24,15 +24,15 @@ class TopicItem: Identifiable, ObservableObject {
         self.tricky = false
     }
     
-    func markAsViewed() {
+    mutating func markAsViewed() {
         self.viewed = true
     }
     
-    func markAsTricky() {
+    mutating func markAsTricky() {
         self.tricky = true
     }
     
-    func reset() {
+    mutating func reset() {
         self.viewed = false
         self.tricky = true
     }
