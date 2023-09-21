@@ -17,19 +17,22 @@ class TopicManager: ObservableObject {
     
     init() {
         self.topics = [Topic(name: "North American Cat Breeds", emoji: "🐈‍⬛"),
-                  Topic(name: "Summer Blooms", emoji: "🌸"),
-                  Topic(name: "Tropical Birds", emoji: "🦜"),
-                  Topic(name: "Flags Around the World", emoji: "🇺🇸"),
-                  Topic(name: "Countries Around the Globe", emoji: "🌍")]
+                       Topic(name: "Summer Blooms", emoji: "🌸"),
+                       Topic(name: "Tropical Birds", emoji: "🦜"),
+                       Topic(name: "Flags Around the World", emoji: "🇺🇸"),
+                       Topic(name: "Countries Around the Globe", emoji: "🌍")]
     }
     
     init(makeFlashCards: Bool = false) {
-        if makeFlashCards{
-        self.topics = [Topic(name: "North American Cat Breeds", emoji: "🐈‍⬛"),
-                  Topic(name: "Summer Blooms", emoji: "🌸"),
-                  Topic(name: "Tropical Birds", emoji: "🦜"),
-                  Topic(name: "Flags Around the World", emoji: "🇺🇸"),
-                  Topic(name: "Countries Around the Globe", emoji: "🌍")]
+        if makeFlashCards {
+            self.topics = [Topic(name: "North American Cat Breeds", emoji: "🐈‍⬛", makeFlashCards: true),
+                           Topic(name: "Summer Blooms", emoji: "🌸", makeFlashCards: true),
+                           Topic(name: "Tropical Birds", emoji: "🦜", makeFlashCards: true),
+                           Topic(name: "Flags Around the World", emoji: "🇺🇸", makeFlashCards: true),
+                           Topic(name: "Countries Around the Globe", emoji: "🌍", makeFlashCards: true)]
+        } else {
+            self.topics = []
+        }
     }
     
     // TODO: init function creating the set of available topics Topic() from JSON file
@@ -57,5 +60,5 @@ class TopicManager: ObservableObject {
     func getCurrentTopics() -> [Topic] {
         return topics.filter { $0.added }
     }
-
+    
 }
