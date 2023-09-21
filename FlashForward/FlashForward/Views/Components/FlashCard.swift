@@ -52,7 +52,8 @@ struct Card: View {
             Content(isFaceUp ? item.front : item.back)
                 .rotation3DEffect(.degrees(isFaceUp ? 0: 180), axis: (x: 0, y: 1, z: 0))
         }
-        .padding(.vertical, 100)
+        .safeAreaPadding(.bottom, 50)
+        .containerRelativeFrame(.vertical)
     }
 }
 
