@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import VTabView
 
 struct FlashCardView: View {
     @Binding var topic: Topic
@@ -15,34 +14,27 @@ struct FlashCardView: View {
         let flashcards = topic.flashCards
         
         NavigationView {
-            VStack{
-                VTabView() {
-                    ForEach(flashcards){ card in
-
-                        VStack{
-                            FlashCard(item: card)
-                                .tag(card.id)
-                                .onAppear() {
-                                    if !card.viewed {
-                                        if let c = flashcards.first(where: { $0.id == card.id }) {
-                                            c.viewed = true
-                                            topic.progress += 1
-                                        }
-                                    }
-                                }
-                            Text(card.viewed ? "Previously Viewed" : "New Card!")
-                            
-                        }
-                   }
+            ScrollView {
+                ForEach(flashcards) { card in
+                    FlashCard(item: card)
+                    
+                    // TODO: Confirm below logic works as expected
+//                        .tag(card.id)
+//                                                       .onAppear() {
+//                                                           if !card.viewed {
+//                                                               if let c = flashcards.first(where: { $0.id == card.id }) {
+//                                                                   c.viewed = true
+//                                                                   topic.progress += 1
+//                                                               }
+//                                                           }
+//                                                       }
+//                                                   Text(card.viewed ? "Previously Viewed" : "New Card!")
                 }
-                .tabViewStyle(PageTabViewStyle())
-
-                ProgressView("Completed \(topic.progress)/\(topic.total)", value: Double(topic.progress / topic.total))
-                    .padding(.horizontal)
-                Spacer()
-
+                .scrollTargetLayout()
             }
-            .navigationTitle("\(topic.name)") // TODO: reduce font size
+            .scrollTargetBehavior(.viewAligned)
+            .navigationTitle("\(topic.name)")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
@@ -50,7 +42,7 @@ struct FlashCardView: View {
 struct FlashCardView_Previews: PreviewProvider {
     
     static var previews: some View {
-        @StateObject var manager = TopicManager()
+        @StateObject var manager = TopicManager(makeFlashCards: true)
         
         FlashCardView(topic: $manager.topics[0])
             .environmentObject(manager)
