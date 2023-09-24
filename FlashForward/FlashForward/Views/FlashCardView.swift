@@ -12,47 +12,54 @@ struct FlashCardView: View {
     @Binding var topic: Topic
     
     var body: some View {
-//        let flashcards = topic.flashCards
-        var progress: Double {
-            if (topic.total == 0){
-                return 0.0
-            } else {
-                return Double(topic.progress / topic.total)
-            }
-        }
-        
         NavigationView {
             VStack{
-                VTabView() {
+                VTabView {
                     ForEach($topic.flashCards){ $card in
                         VStack{
                             FlashCard(item: card)
                                 .tag(card.id)
-                                .onAppear() {
-                                    card.viewed = true
-                                    topic.progress += 1
+                                .onDisappear() {
+                                    if !card.viewed {
+                                        card.viewed = true
+                                        topic.progress += 1
+                                    }
                                 }
-                            Text(card.viewed ? "Previously Viewed" : "New Card!")
-                            
                         }
                    }
                 }
-                .tabViewStyle(PageTabViewStyle())
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 
-                ProgressView("Completed \(topic.progress)/\(topic.total)", value: progress)
+                flashcardProgressDisplay(topic: $topic)
                     .padding(.horizontal)
-                Spacer()
             }
-            .navigationTitle("\(topic.name)") // TODO: reduce font size
+            .navigationTitle("\(topic.name)") // TODO: reduce font size ?
+            .navigationBarHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
         }
+    }
+}
+
+struct flashcardProgressDisplay: View {
+    @Binding var topic: Topic
+    
+    var body: some View {
+        ProgressView(value: topic.progressIndicatorValue) {
+            HStack{
+                Text("Completed \(topic.progress)/\(topic.total)")
+                Spacer()
+                Text("\(topic.progressIndicatorValue * 100, specifier: "%.0f")%")
+            }
+        }
+        .tint(.teal)
     }
 }
 
 struct FlashCardView_Previews: PreviewProvider {
     
     static var previews: some View {
-        @StateObject var manager = TopicManager()
-        
+        @StateObject var manager = TopicManager(makeFlashCards: true)
+
         FlashCardView(topic: $manager.topics[0])
             .environmentObject(manager)
     }

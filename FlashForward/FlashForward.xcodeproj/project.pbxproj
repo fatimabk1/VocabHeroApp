@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		087399132A9FC182004DF252 /* VTabView in Frameworks */ = {isa = PBXBuildFile; productRef = 087399122A9FC182004DF252 /* VTabView */; };
+		0849EE262ABDFEB700893EA0 /* VTabView in Frameworks */ = {isa = PBXBuildFile; productRef = 0849EE252ABDFEB700893EA0 /* VTabView */; };
 		0886F7652A9078AF00D7E82C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCEF4F2A906D6600160E4E /* ContentView.swift */; };
 		0886F7692A907A3C00D7E82C /* CurrentTopicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F7682A907A3C00D7E82C /* CurrentTopicsView.swift */; };
 		0886F76C2A907A6100D7E82C /* TopicCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F76B2A907A6100D7E82C /* TopicCard.swift */; };
@@ -21,7 +21,6 @@
 		0886F77D2A907C0300D7E82C /* TopicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F77C2A907C0300D7E82C /* TopicManager.swift */; };
 		0886F77F2A96586F00D7E82C /* FlashCardEditable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F77E2A96586F00D7E82C /* FlashCardEditable.swift */; };
 		0886F7812A96588000D7E82C /* EditFlashCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F7802A96588000D7E82C /* EditFlashCardView.swift */; };
-		08BD7CF22AB8A3BF003BDD38 /* Playground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BD7CF12AB8A3BF003BDD38 /* Playground.swift */; };
 		08DCEF4E2A906D6600160E4E /* FlashForwardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCEF4D2A906D6600160E4E /* FlashForwardApp.swift */; };
 		08DCEF522A906D6900160E4E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08DCEF512A906D6900160E4E /* Assets.xcassets */; };
 		08DCEF552A906D6900160E4E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08DCEF542A906D6900160E4E /* Preview Assets.xcassets */; };
@@ -40,7 +39,6 @@
 		0886F77C2A907C0300D7E82C /* TopicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicManager.swift; sourceTree = "<group>"; };
 		0886F77E2A96586F00D7E82C /* FlashCardEditable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardEditable.swift; sourceTree = "<group>"; };
 		0886F7802A96588000D7E82C /* EditFlashCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFlashCardView.swift; sourceTree = "<group>"; };
-		08BD7CF12AB8A3BF003BDD38 /* Playground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playground.swift; sourceTree = "<group>"; };
 		08DCEF4A2A906D6600160E4E /* FlashForward.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashForward.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08DCEF4D2A906D6600160E4E /* FlashForwardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashForwardApp.swift; sourceTree = "<group>"; };
 		08DCEF4F2A906D6600160E4E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -53,7 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				087399132A9FC182004DF252 /* VTabView in Frameworks */,
+				0849EE262ABDFEB700893EA0 /* VTabView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,7 +89,6 @@
 				0886F7782A907BC600D7E82C /* Topic.swift */,
 				0886F77A2A907BDE00D7E82C /* TopicItem.swift */,
 				0886F77C2A907C0300D7E82C /* TopicManager.swift */,
-				08BD7CF12AB8A3BF003BDD38 /* Playground.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -149,7 +146,7 @@
 			);
 			name = FlashForward;
 			packageProductDependencies = (
-				087399122A9FC182004DF252 /* VTabView */,
+				0849EE252ABDFEB700893EA0 /* VTabView */,
 			);
 			productName = FlashForward;
 			productReference = 08DCEF4A2A906D6600160E4E /* FlashForward.app */;
@@ -163,7 +160,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					08DCEF492A906D6600160E4E = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -180,7 +177,7 @@
 			);
 			mainGroup = 08DCEF412A906D6600160E4E;
 			packageReferences = (
-				087399112A9FC182004DF252 /* XCRemoteSwiftPackageReference "swiftui-vertical-tab-view" */,
+				0849EE242ABDFEB700893EA0 /* XCRemoteSwiftPackageReference "swiftui-vertical-tab-view" */,
 			);
 			productRefGroup = 08DCEF4B2A906D6600160E4E /* Products */;
 			projectDirPath = "";
@@ -219,7 +216,6 @@
 				0886F76C2A907A6100D7E82C /* TopicCard.swift in Sources */,
 				0886F7792A907BC700D7E82C /* Topic.swift in Sources */,
 				0886F76E2A907A7100D7E82C /* TopicProgressCard.swift in Sources */,
-				08BD7CF22AB8A3BF003BDD38 /* Playground.swift in Sources */,
 				08DCEF4E2A906D6600160E4E /* FlashForwardApp.swift in Sources */,
 				0886F7692A907A3C00D7E82C /* CurrentTopicsView.swift in Sources */,
 				0886F7762A907B1800D7E82C /* EndFlashCardView.swift in Sources */,
@@ -265,6 +261,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -325,6 +322,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -359,6 +357,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -388,6 +387,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -425,7 +425,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		087399112A9FC182004DF252 /* XCRemoteSwiftPackageReference "swiftui-vertical-tab-view" */ = {
+		0849EE242ABDFEB700893EA0 /* XCRemoteSwiftPackageReference "swiftui-vertical-tab-view" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-vertical-tab-view";
 			requirement = {
@@ -436,9 +436,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		087399122A9FC182004DF252 /* VTabView */ = {
+		0849EE252ABDFEB700893EA0 /* VTabView */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 087399112A9FC182004DF252 /* XCRemoteSwiftPackageReference "swiftui-vertical-tab-view" */;
+			package = 0849EE242ABDFEB700893EA0 /* XCRemoteSwiftPackageReference "swiftui-vertical-tab-view" */;
 			productName = VTabView;
 		};
 /* End XCSwiftPackageProductDependency section */

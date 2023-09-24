@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-// TODO: uncomment - removed for testing purposes
+
+
 @main
 struct FlashForwardApp: App {
     @StateObject var manager = TopicManager()
@@ -18,15 +19,3 @@ struct FlashForwardApp: App {
         }
     }
 }
-
-//@main
-//struct FlashForwardApp: App {
-//    @StateObject var library = Library()
-//
-//    var body: some Scene {
-//        WindowGroup {
-//            View1()
-//                .environmentObject(library)
-//        }
-//    }
-//}

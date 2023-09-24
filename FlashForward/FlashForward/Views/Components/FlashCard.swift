@@ -12,6 +12,8 @@ struct FlashCard: View {
     
     @State var isFaceUp: Bool = true
     @State var cardRotation: Double = 0.0
+    
+//    @Binding varcard: TopicItem
 
     var body: some View {
         ZStack {
@@ -52,7 +54,6 @@ struct Card: View {
             Content(isFaceUp ? item.front : item.back)
                 .rotation3DEffect(.degrees(isFaceUp ? 0: 180), axis: (x: 0, y: 1, z: 0))
         }
-        .padding(.vertical, 100)
     }
 }
 

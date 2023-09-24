@@ -15,7 +15,7 @@ struct CurrentTopicsView: View {
         VStack {
             NavigationStack {
                 Group {
-                    if manager.currentTopics.isEmpty {
+                    if manager.topics.filter({$0.added}).isEmpty {
                         emptyStatePrompt()
                     } else {
                         displayCurrentTopics()
@@ -42,29 +42,75 @@ struct emptyStatePrompt: View {
     }
 }
 
+struct topicListRow: View {
+    @Binding var topic: Topic
+    var body: some View {
+        HStack {
+            if let emoji = topic.emoji {
+                Text("\(emoji) ")
+                    .font(.title)
+            }
+            VStack(alignment: .leading){
+                Text(topic.name)
+                    .foregroundColor(.black)
+                Text("Completed \(topic.progress)/\(topic.total)")
+                    .font(.callout)
+                    .foregroundColor(.gray)
+            }
+            Spacer()
+            circularProgress(progress: topic.progressIndicatorValue)
+                .frame(height: 30)
+        }
+    }
+}
+
+// Start sourced from https://sarunw.com/posts/swiftui-circular-progress-bar/
+struct circularProgress: View {
+    let progress: Double
+    
+    var body: some View {
+        HStack{
+            ZStack{
+                Circle()
+                    .stroke(
+                        Color.teal.opacity(0.3),
+                        lineWidth: 8
+                    )
+                Circle()
+                    .trim(from: 0, to: progress)
+                    .stroke(
+                        Color.teal,
+                        style: StrokeStyle(
+                            lineWidth: 8,
+                            lineCap: .round
+                        )
+                    )
+                    .rotationEffect(.degrees(-90))
+            }
+        }
+    }
+}
+// End sourced from https://sarunw.com/posts/swiftui-circular-progress-bar/
+
 struct displayCurrentTopics: View {
     @EnvironmentObject var manager: TopicManager
     
     var body: some View {
-        List($manager.topics) { $topic in
-            NavigationLink {
-                FlashCardView(topic: $topic)
-            } label: {
-                HStack {
-                    if let emoji = topic.emoji {
-                        Text("\(emoji) ")
-                            .font(.title)
+        NavigationStack{
+            List($manager.topics) { $topic in
+                if topic.added {
+                    NavigationLink {
+                        FlashCardView(topic: $topic)
+                        
+                    } label: {
+                        topicListRow(topic: $topic)
+                            .frame(height: 70)
                     }
-                    Text(topic.name)
-                    Spacer()
-                    // TODO: Swap for progress indicator
-                    Text("\(topic.progress)/\(topic.total)")
-                    
                 }
             }
+            .environment(\.defaultMinListRowHeight, 70)
+            .listStyle(.inset)
         }
-        .environment(\.defaultMinListRowHeight, 70)
-        .listStyle(.inset)
     }
 }
 

@@ -16,9 +16,32 @@ struct Topic: Identifiable, Equatable, Hashable {
     var added: Bool
     
     // set details
-    var progress = 0
     var total = 0
+    
+    private var _progress = 0
+    var progress: Int {
+        get { return _progress }
+        set {
+            if newValue > total {
+                _progress = total
+            } else if newValue < 0 {
+                _progress = 0
+            } else {
+                _progress = newValue
+            }
+        }
+    }
+
+    var progressIndicatorValue: Double {
+        if (total == 0){
+            return 0
+        } else {
+            return Double(progress) / Double(total)
+        }
+    }
+    
     var flashCards: [TopicItem]
+
     
     init(name: String, emoji: String? = nil, makeFlashCards: Bool = false){
         self.id = UUID()

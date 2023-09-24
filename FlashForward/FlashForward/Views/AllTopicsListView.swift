@@ -9,32 +9,41 @@ import SwiftUI
 
 struct AllTopicsListView: View {
     @EnvironmentObject var manager: TopicManager
-    @State private(set) var selections: [Topic] = []
+    @State private(set) var selections = Set<Topic>()
+    @State var savedSelection = false
     @Binding var isPresented: Bool
     
     func updateSelections(topic: Topic){
         if selections.contains(topic) {
-           selections.removeAll(where: { $0 == topic })
+           selections.remove(topic)
        } else {
-           selections.append(topic)
+           selections.insert(topic)
        }
     }
     
     var body: some View {
+        
        NavigationView {
            List {
                Section(header: Text("Available Topics"), footer: Text("\(selections.count) topics selected")) {
-                   ForEach(manager.availableTopics, id: \.id) { topic in
-                       MultiSelectRow(topic: topic, isSelected: self.selections.contains(topic)) {
-                           updateSelections(topic: topic)
+                   
+                   ForEach(manager.topics, id: \.id) { topic in
+                       if !topic.added {
+                           MultiSelectRow(topic: topic, isSelected: self.selections.contains(topic)) {
+                               updateSelections(topic: topic)
+                           }
                        }
                    }
+                   
                }
            }
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) { CancelButton(isPresented: $isPresented) }
-                ToolbarItem(placement: .navigationBarLeading) { Spacer() }
-                ToolbarItem(placement: .navigationBarTrailing) { SaveButton(isPresented: $isPresented, selections: $selections) }
+                ToolbarItem(placement: .primaryAction) {
+                    SaveButton(isPresented: $isPresented, selections: $selections)
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    CancelButton(isPresented: $isPresented)
+                }
             }
         }
     }
@@ -43,29 +52,39 @@ struct AllTopicsListView: View {
 struct SaveButton: View {
     @EnvironmentObject var manager: TopicManager
     @Binding var isPresented: Bool
-    @Binding var selections: [Topic]
+    @Binding var selections: Set<Topic>
     
     var body: some View{
-        HStack{
-//            Button {
-//                isPresented = false
-//            } label: {
-//                Text(selections[0].added ? "Selections added" : "NO change")
-//            }
+        Button {
             
-            // Save Button
-            Button {
-//                var topicsToAdd = Set(manager.topics).intersection(Set(selections))
-//                for topic in topicsToAdd{
-//                    manager.topics.filter({$0.id == topic.id})[0].added = true
-//                }
-                for topic in selections {
-                    manager.addSet(topic)
-                }
-                isPresented = false
-            } label: {
-                Text("Save")
+                
+                
+//                 // Alt option 1
+//                 for (index, _) in selections.count {
+//                    selections[index].added = true
+//                 }
+//
+//                 // Alt option 2
+//                 for index in 0..<selections.count {
+//                    selections[index].added = true
+//                 }
+//
+                 // Alt option 3
+//                manager.topics = manager.topics.map({
+//                    if selections.contains($0) {
+//                        var modified = $0
+//                        modified.added = true
+//                        return modified
+//                    } else {
+//                        return $0
+//                    }
+//                })
+            for selection in selections {
+                manager.addSet(selection)
             }
+            isPresented = false
+        } label: {
+            Text("Save")
         }
     }
 }
@@ -96,6 +115,7 @@ struct MultiSelectRow: View {
 
 struct CancelButton: View {
     @Binding var isPresented: Bool
+    
     var body: some View {
         Button(role: .cancel) {
             isPresented = false
