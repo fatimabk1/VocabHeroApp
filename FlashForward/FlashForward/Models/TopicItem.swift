@@ -14,35 +14,29 @@ struct TopicItem: Identifiable {
     let front: String?
     let back: String?
     var viewed: Bool
-    var tricky: Bool
+    var review: Bool
+    let orderIndex: Int
     
-    init(_ front: String? = nil, _ back: String? = nil) {
+    init(_ front: String? = nil, _ back: String? = nil, order: Int) {
         self.id = UUID()
         self.front = front
         self.back = back
         self.viewed = false
-        self.tricky = false
-    }
-    
-    mutating func markAsViewed() {
-        self.viewed = true
-    }
-    
-    mutating func markAsTricky() {
-        self.tricky = true
+        self.review = false
+        self.orderIndex = order
     }
     
     mutating func reset() {
         self.viewed = false
-        self.tricky = true
+        self.review = true
     }
 
 }
 
 
 
-var topicItemList = [TopicItem("cat", "a feline creature"),
-                     TopicItem("flower", "a blooming plant"),
-                     TopicItem("country", "a demarcated area on the globe"),
-                     TopicItem("bird", "a flying creature"),
-                     TopicItem("flag", "a flying cloth with colors representing a country")]
+var topicItemList = [TopicItem("cat", "a feline creature", order: 0),
+                     TopicItem("flower", "a blooming plant", order: 1),
+                     TopicItem("country", "a demarcated area on the globe", order: 2),
+                     TopicItem("bird", "a flying creature", order: 3),
+                     TopicItem("flag", "a flying cloth with colors representing a country", order: 4)]

@@ -76,7 +76,7 @@ struct Content: View {
 
 struct FlashCard_Previews: PreviewProvider {
     static var previews: some View {
-        let item = TopicItem("dog", "a furry and barking animal")
+        let item = TopicItem("dog", "a furry and barking animal", order: 0)
         FlashCard(item: item)
     }
 }
