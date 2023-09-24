@@ -105,6 +105,12 @@ struct displayCurrentTopics: View {
                     } label: {
                         topicListRow(topic: $topic)
                             .frame(height: 70)
+                            .swipeActions {
+                                Button (action: { topic.removeFromLearning() }) {
+                                      Label("Delete", systemImage: "trash")
+                                  }
+                                .tint(.red)
+                            }
                     }
                 }
             }
