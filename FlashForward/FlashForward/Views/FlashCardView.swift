@@ -10,20 +10,22 @@ import VTabView
 
 struct FlashCardView: View {
     @Binding var topic: Topic
+    @State var tag: Int = 0
     
     var body: some View {
         NavigationView {
             VStack{
-                VTabView {
-                    ForEach($topic.flashCards){ $card in
+                VTabView(selection: $tag) {
+                    ForEach(0..<topic.flashCards.count, id: \.self){ index in
                         VStack{
-                            FlashCard(item: card)
-                                .tag(card.id)
+                            FlashCard(item: topic.flashCards[index])
+                                .tag(topic.flashCards[index].id)
                                 .onDisappear() {
-                                    if !card.viewed {
-                                        card.viewed = true
+                                    if !topic.flashCards[index].viewed {
+                                        topic.flashCards[index].viewed = true
                                         topic.progress += 1
                                     }
+                                    topic.mostRecentFlashCard = topic.flashCards[index].id
                                 }
                         }
                    }
@@ -36,6 +38,9 @@ struct FlashCardView: View {
             .navigationTitle("\(topic.name)") // TODO: reduce font size ?
             .navigationBarHidden(true)
             .navigationBarTitleDisplayMode(.inline)
+        }
+        .onAppear {
+            tag = topic.flashCards.firstIndex(where: {$0.id == topic.mostRecentFlashCard}) ?? 0
         }
     }
 }

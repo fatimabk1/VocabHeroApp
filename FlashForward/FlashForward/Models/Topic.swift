@@ -41,6 +41,7 @@ struct Topic: Identifiable, Equatable, Hashable {
     }
     
     var flashCards: [TopicItem]
+    var mostRecentFlashCard: UUID
 
     
     init(name: String, emoji: String? = nil, makeFlashCards: Bool = false){
@@ -49,6 +50,7 @@ struct Topic: Identifiable, Equatable, Hashable {
         self.emoji = emoji
         self.added = makeFlashCards ? true : false
         self.flashCards = []
+        self.mostRecentFlashCard = self.id
         
         if makeFlashCards { createFlashCards() }
     }
