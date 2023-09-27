@@ -20,7 +20,14 @@ struct Dictionary: Identifiable {
     var word: String
     var partOfSpeech: String
     var definition: String
-    var example: String
+    var example: String?
+}
+
+struct MyTopicItem: Identifiable {
+    let id = UUID()
+    var word: String
+    var definitions: [String]
+    var examples: [String]
 }
 
 // JSON structure matching my data
@@ -36,7 +43,7 @@ struct Meaning: Decodable {
 
 struct Definition: Decodable {
     let definition: String
-    let example: String
+    let example: String?
 }
 
 
@@ -68,32 +75,37 @@ func loadData(word: String, completion: @escaping(Result<Data, Error>) -> Void){
     }.resume()
 }
     
-func parseDecodeJSON(data: Data) -> [Dictionary]? {
-    
+func parseDecodeJSON(data: Data) -> MyTopicItem? {
+
     do {
-        // parse JSON into array of JSONData objects
         let decodedData: [JSONData] = try JSONDecoder().decode([JSONData].self, from: data)
         
-        let dictionaries = decodedData.map { JSONData in // for each item in decodedData (expecting only 1)
-            let firstMeaning = JSONData.meanings.first
-            let firstDefinition = firstMeaning?.definitions.first
-            return Dictionary(
-                word: JSONData.word,
-                partOfSpeech: firstMeaning?.partOfSpeech ?? "",
-                definition: firstDefinition?.definition ?? "",
-                example: firstDefinition?.example ?? ""
-            )
+        if let firstDecodedData = decodedData.first {
+            let word = firstDecodedData.word
+            print("WORD: \(word)")
+            
+            var definitionArray: [String] = []
+            var exampleArray: [String] = []
+            for meaning in firstDecodedData.meanings {
+                for definition in meaning.definitions {
+                    print("DEF: \(definition.definition)")
+                    definitionArray.append(definition.definition)
+                    if let example = definition.example {
+                        exampleArray.append(example)
+                    }
+                }
+            }
+            return MyTopicItem(word: word, definitions: definitionArray, examples: exampleArray)
         }
-        return dictionaries
+        return nil
     } catch {
         print("parseDecodeJSON error: \(error)")
         return nil
     }
-    
 }
 
 struct dictionaryView: View {
-    @State var dictionaryItems: [Dictionary]?
+    @State var topicItem: MyTopicItem?
     @State var word: String = ""
     @State var showingAlert: Bool = false
     @State var alertMessage = ""
@@ -110,7 +122,7 @@ struct dictionaryView: View {
                                 self.alertMessage = "Error loading data: \(error.localizedDescription)"
                                 self.showingAlert = true
                             case .success(let data):
-                                self.dictionaryItems = parseDecodeJSON(data: data)
+                                self.topicItem = parseDecodeJSON(data: data)
                             }
                         }
                         
@@ -122,17 +134,15 @@ struct dictionaryView: View {
                 }
                 .padding()
                 List {
-//                    if let items = dictionaryItems {
-                    ForEach(dictionaryItems?.indices ?? (0..<0), id: \.self) { index in
-                            if let dict = dictionaryItems?[index]{
-                                Section {
-                                    VStack(alignment: .leading){
-                                        Text("\(index+1). \(Text(dict.partOfSpeech).italic())")
-                                        Text("\(dict.definition)")
-                                        Text("\"\(dict.example)\"")
-                                    }
+                    if let topic = topicItem {
+                        ForEach(topic.definitions.indices, id: \.self) { index in
+                            VStack(alignment: .leading){
+                                Text("\(index). \(topic.definitions[index])")
+                                if index < topic.examples.count {
+                                    Text("\(topic.examples[index])").italic()
                                 }
                             }
+                        }
                     }
                 }
             }
