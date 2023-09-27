@@ -52,21 +52,3 @@ struct TopicCard_Previews: PreviewProvider {
         TopicCard(topic: catTopic)
     }
 }
-//
-//VStack{
-//                    topic.image! // Image("cat")
-//                        .resizable()
-//                        .scaledToFill()
-//                        .frame(width: 180, height: 250)
-//                        .cornerRadius(20)
-//                        .shadow(radius: 10)
-//                        .overlay(
-//                            Text("\(topic.name)")
-//                                .foregroundColor(.white)
-//                                .fontWeight(.bold)
-//                                .padding(8)
-//                                .background(Color.black.opacity(0.5))
-//                                .cornerRadius(10)
-//                                .offset(y: -90)
-//                        )
-//                }

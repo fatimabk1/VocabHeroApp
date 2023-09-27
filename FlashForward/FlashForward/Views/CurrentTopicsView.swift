@@ -101,7 +101,6 @@ struct displayCurrentTopics: View {
                 if topic.added {
                     NavigationLink {
                         FlashCardView(topic: $topic)
-                        
                     } label: {
                         topicListRow(topic: $topic)
                             .frame(height: 70)

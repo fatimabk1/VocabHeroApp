@@ -24,6 +24,7 @@
 		08DCEF4E2A906D6600160E4E /* FlashForwardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCEF4D2A906D6600160E4E /* FlashForwardApp.swift */; };
 		08DCEF522A906D6900160E4E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08DCEF512A906D6900160E4E /* Assets.xcassets */; };
 		08DCEF552A906D6900160E4E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08DCEF542A906D6900160E4E /* Preview Assets.xcassets */; };
+		08F57C3B2AC0EF3C00926229 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F57C3A2AC0EF3B00926229 /* Data.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		08DCEF4F2A906D6600160E4E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		08DCEF512A906D6900160E4E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		08DCEF542A906D6900160E4E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		08F57C3A2AC0EF3B00926229 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				0886F7782A907BC600D7E82C /* Topic.swift */,
+				08F57C3A2AC0EF3B00926229 /* Data.swift */,
 				0886F77A2A907BDE00D7E82C /* TopicItem.swift */,
 				0886F77C2A907C0300D7E82C /* TopicManager.swift */,
 			);
@@ -206,6 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0886F7702A907AA000D7E82C /* FlashCard.swift in Sources */,
+				08F57C3B2AC0EF3C00926229 /* Data.swift in Sources */,
 				0886F77B2A907BDE00D7E82C /* TopicItem.swift in Sources */,
 				0886F77F2A96586F00D7E82C /* FlashCardEditable.swift in Sources */,
 				0886F7812A96588000D7E82C /* EditFlashCardView.swift in Sources */,
