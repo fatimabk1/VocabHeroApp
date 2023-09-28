@@ -54,8 +54,27 @@ struct Topic: Identifiable, Equatable, Hashable {
         self.mostRecentFlashCard = self.id
         self.shuffled = false
         
-        if makeFlashCards { createFlashCards() }
+        if makeFlashCards { self.makeFlashCards() }
     }
+    
+    // TODO: REMOVE WHEN DONE
+    mutating func makeFlashCards() {
+        let myDictionaries =
+            [Dictionary(word: "yay", definitions:
+                      [Definition(definition: "yay definition 1", example: "yay example 1"),
+                       Definition(definition: "yay definition 2", example: nil)]),
+            Dictionary(word: "success", definitions:
+                      [Definition(definition: "success definition 1", example: "success example 1"),
+                       Definition(definition: "success definition 2", example: "success example 2")]),
+            Dictionary(word: "annoying", definitions:
+                      [Definition(definition: "annoying definition 1", example: nil),
+                       Definition(definition: "annoying definition 2", example: "annoying example 2")])
+        ]
+        for d in myDictionaries {
+            addFlashCard(dictionary: d)
+        }
+    }
+    
     mutating func incrementProgress(){
         self.progress += 1
     }
@@ -69,9 +88,11 @@ struct Topic: Identifiable, Equatable, Hashable {
         }
     }
     
-    mutating func addToLearning(){
+    mutating func addToLearning(dictionaries: [Dictionary]){
         self.added = true
-        createFlashCards()
+        for d in dictionaries {
+            addFlashCard(dictionary: d)
+        }
     }
     
     mutating func removeFromLearning(){
@@ -79,12 +100,15 @@ struct Topic: Identifiable, Equatable, Hashable {
         deleteFlashCards()
     }
     
-    mutating func createFlashCards(){
-        // TODO: read data in from JSON file
-        for (index, cat) in catTypes.enumerated() {
-            flashCards.append(TopicItem(cat, "A feline creature with a pheontype of \(cat)", order: index))
-        }
-        total = flashCards.count
+    mutating func addFlashCard(dictionary: Dictionary) {
+        var orderIndexArray = self.flashCards.map { $0.orderIndex }
+        var orderIndex = orderIndexArray.max() ?? 0
+        self.flashCards.append(TopicItem(dictionary: dictionary, order: orderIndex))
+        self.total += 1
+    }
+    
+    mutating func removeFlashCard() {
+       // TODO: write removeFlashCard()
     }
     
     mutating func deleteFlashCards(){

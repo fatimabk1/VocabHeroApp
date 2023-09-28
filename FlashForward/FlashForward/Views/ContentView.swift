@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var manager: TopicManager
-    
+    // TODO: add tab bar to switch between word look up & deck view
     var body: some View {
         CurrentTopicsView()
     }

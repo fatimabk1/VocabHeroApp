@@ -34,8 +34,20 @@ class TopicManager: ObservableObject {
     }
         
     func addSet(_ t: Topic) {
+        // TODO: REMOVE WHEN DONE
+        let myDictionaries =
+            [Dictionary(word: "yay", definitions:
+                      [Definition(definition: "yay definition 1", example: "yay example 1"),
+                       Definition(definition: "yay definition 2", example: nil)]),
+            Dictionary(word: "success", definitions:
+                      [Definition(definition: "success definition 1", example: "success example 1"),
+                       Definition(definition: "success definition 2", example: "success example 2")]),
+            Dictionary(word: "annoying", definitions:
+                      [Definition(definition: "annoying definition 1", example: nil),
+                       Definition(definition: "annoying definition 2", example: "annoying example 2")])]
+            
         topics.indices.filter{ topics[$0].id == t.id }
-            .forEach{ topics[$0].addToLearning() }
+            .forEach{ topics[$0].addToLearning(dictionaries: myDictionaries) }
     }
     
     func removeSet(_ topic: Topic) {

@@ -51,32 +51,46 @@ struct Card: View {
             RoundedRectangle(cornerRadius: 20)
                 .strokeBorder(.white, lineWidth: 5)
                 .shadow(color: .black, radius: 10)
-            Content(isFaceUp ? item.front : item.back)
+            Content(isFaceUp: $isFaceUp, content: item.dictionary)
                 .rotation3DEffect(.degrees(isFaceUp ? 0: 180), axis: (x: 0, y: 1, z: 0))
         }
     }
 }
 
 struct Content: View {
-    let content: String?
-    
-    init(_ content: String?){
-        self.content = content
-    }
+    @Binding var isFaceUp: Bool
+    let content: Dictionary
     
     var body: some View {
-        if let txt = content {
-            Text(txt)
-                .foregroundColor(.white)
-                .font(.title)
-                .padding(30)
+        Group {
+            if isFaceUp {
+                Text(content.word)
+            } else {
+                VStack(alignment: .leading){
+                    Text(content.word)
+                        .font(.headline)
+                    let definitionArray = content.definitions
+                    ForEach(definitionArray.indices, id: \.self) { index in
+                        Text("\(index+1). \(definitionArray[index].definition)")
+                        if let example = definitionArray[index].example {
+                            Text("\"\(example)\"")
+                                .italic()
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
+            }
         }
+        .foregroundColor(.white)
+        .font(.title)
+        .padding(30)
     }
 }
 
 struct FlashCard_Previews: PreviewProvider {
     static var previews: some View {
-        let item = TopicItem("dog", "a furry and barking animal", order: 0)
+        let d = Dictionary(word: "hello", definitions: [Definition(definition: "a definition", example: "an example")])
+        let item = TopicItem(dictionary: d, order: 0)
         FlashCard(item: item)
     }
 }

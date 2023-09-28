@@ -23,7 +23,7 @@ struct AllTopicsListView: View {
     
     var body: some View {
         
-       NavigationView {
+       NavigationStack {
            List {
                Section(header: Text("Available Topics"), footer: Text("\(selections.count) topics selected")) {
                    
@@ -56,29 +56,6 @@ struct SaveButton: View {
     
     var body: some View{
         Button {
-            
-                
-                
-//                 // Alt option 1
-//                 for (index, _) in selections.count {
-//                    selections[index].added = true
-//                 }
-//
-//                 // Alt option 2
-//                 for index in 0..<selections.count {
-//                    selections[index].added = true
-//                 }
-//
-                 // Alt option 3
-//                manager.topics = manager.topics.map({
-//                    if selections.contains($0) {
-//                        var modified = $0
-//                        modified.added = true
-//                        return modified
-//                    } else {
-//                        return $0
-//                    }
-//                })
             for selection in selections {
                 manager.addSet(selection)
             }
