@@ -46,37 +46,42 @@ struct Definition: Decodable {
     let example: String?
 }
 
-
-func loadData(word: String, completion: @escaping(Result<Data, Error>) -> Void){
-     let url = "https://api.dictionaryapi.dev/api/v2/entries/en/"
-    
-    // validate URL
-    guard let url = URL(string: url + word) else {
-        completion(.failure(NSError(domain: "InvalidURL", code: -1, userInfo: nil)))
-        return
-    }
-    
-    // API call
-    URLSession.shared.dataTask(with: url) { (data, _, error) in  // data, response, error
-        
-        if error != nil {
-            completion(.failure(NSError(domain: "URLError", code: -1)))
-            return
-        }
-        
-        // received data
-        if let data = data {
-            completion(.success(data))
-            return
-        } else {
-            completion(.failure(NSError(domain: "DataError", code: -1, userInfo: nil)))
-            return
-        }
-    }.resume()
+enum FetchError: Error {
+    case invalidURL
+    case requestFailed
+    case parseFailed
 }
-    
-func parseDecodeJSON(data: Data) -> MyTopicItem? {
 
+func fetchAllDictionaries(words: [String]) async throws -> [MyTopicItem] {
+    return try await withThrowingTaskGroup(of: MyTopicItem.self) { taskGroup in
+        var dictionaries =  [MyTopicItem]()
+        for word in words {
+            taskGroup.addTask { return try await fetchDictionary(word: word) }
+        }
+        for try await dictionary in taskGroup {
+          dictionaries.append(dictionary)
+        }
+        return dictionaries
+    }
+}
+
+
+func fetchDictionary(word: String) async throws -> MyTopicItem {
+    let baseURL = "https://api.dictionaryapi.dev/api/v2/entries/en/"
+    guard let wordURL = URL(string: baseURL + word) else { throw FetchError.invalidURL }
+    
+    do {
+        let (data, _) = try await URLSession.shared.data(from: wordURL)
+        let dictionaryWord = try parseJSON(data: data)
+        return dictionaryWord
+    } catch {
+        print("fetchDictionary ERROR: \(error)")
+        throw FetchError.requestFailed
+    }
+}
+
+
+func parseJSON(data: Data) throws -> MyTopicItem {
     do {
         let decodedData: [JSONData] = try JSONDecoder().decode([JSONData].self, from: data)
         
@@ -96,17 +101,20 @@ func parseDecodeJSON(data: Data) -> MyTopicItem? {
                 }
             }
             return MyTopicItem(word: word, definitions: definitionArray, examples: exampleArray)
+        } else {
+            throw FetchError.parseFailed
         }
-        return nil
     } catch {
         print("parseDecodeJSON error: \(error)")
-        return nil
+        throw FetchError.parseFailed
     }
 }
 
+
 struct dictionaryView: View {
-    @State var topicItem: MyTopicItem?
-    @State var word: String = ""
+    @State var dictionaries: [MyTopicItem] = []
+    @State var wordSearch: [String] = []
+    @State var word = ""
     @State var showingAlert: Bool = false
     @State var alertMessage = ""
     
@@ -114,39 +122,54 @@ struct dictionaryView: View {
         NavigationStack {
             VStack {
                 HStack{
-                    TextField("inculcate", text: $word, prompt: Text("Enter a word"))
-                    Button("Submit"){
-                        loadData(word: word) { result in
-                            switch result {
-                            case .failure(let error):
-                                self.alertMessage = "Error loading data: \(error.localizedDescription)"
-                                self.showingAlert = true
-                            case .success(let data):
-                                self.topicItem = parseDecodeJSON(data: data)
-                            }
-                        }
-                        
-                    }
-                    .alert(alertMessage, isPresented: $showingAlert) {
-                        Button("OK", role: .cancel) { }
-                    }
-                    .buttonStyle(.borderedProminent)
+                    TextField("WordSearch", text: $word, prompt: Text("Enter a word"))
+                    wordSearchButton(wordSearch: $wordSearch, word: word, dictionaries: $dictionaries)
                 }
-                .padding()
+                .padding(50)
                 List {
-                    if let topic = topicItem {
-                        ForEach(topic.definitions.indices, id: \.self) { index in
-                            VStack(alignment: .leading){
-                                Text("\(index). \(topic.definitions[index])")
-                                if index < topic.examples.count {
-                                    Text("\(topic.examples[index])").italic()
-                                }
+                    Section("Searched words:") {
+                        ForEach(wordSearch, id: \.self){ w in
+                            Text(w)
+                        }
+                    }
+                }
+                List {
+                    ForEach(dictionaries) { dictionary in
+                        VStack(alignment: .leading){
+                            Text(dictionary.word)
+                                .font(.headline)
+                            if !dictionary.definitions.isEmpty {
+                                Text(dictionary.definitions[0])
+                            }
+                            if !dictionary.examples.isEmpty {
+                                Text("\"\(dictionary.examples[0])\"").italic()
                             }
                         }
                     }
+                    
                 }
             }
             .navigationTitle("Definition Search")
+        }
+    }
+}
+
+
+struct wordSearchButton: View {
+    @Binding var wordSearch: [String]
+    let word: String
+    @Binding var dictionaries: [MyTopicItem]
+    
+    var body: some View {
+        Button("Search"){
+            wordSearch.append(word)
+            Task {
+                do {
+                    dictionaries = try await fetchAllDictionaries(words: wordSearch)
+                } catch {
+                    print("dictionaryView error: \(error)")
+                }
+            }
         }
     }
 }
