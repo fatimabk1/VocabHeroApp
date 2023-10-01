@@ -14,10 +14,21 @@ import SwiftUI
 // Origin
 // MEANINGS  1 & 2, examples 1 & 2
 
-struct Dictionary: Identifiable {
+struct Dictionary: Identifiable, Equatable, Hashable {
+
     let id = UUID()
     var word: String
     var definitions: [Definition]
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.id)
+    }
+    
+    static func == (lhs: Dictionary, rhs: Dictionary) -> Bool {
+        return (lhs.id == rhs.id &&
+                lhs.word == rhs.word &&
+                lhs.definitions == rhs.definitions)
+    }
 }
 
 // JSON structure matching my data
@@ -31,7 +42,7 @@ struct Meaning: Decodable {
     let definitions: [Definition]
 }
 
-struct Definition: Decodable {
+struct Definition: Decodable, Equatable {
     let definition: String
     let example: String?
 }
@@ -99,20 +110,17 @@ func parseJSON(data: Data) throws -> Dictionary {
 /*
  
  (1) EditDeckView
- - takes a Topic?. If nil, create one for editing, else display current in list
- - Topic name w emoji icon
- - Search bar
- - Display words + definitions in list as added (adds to the top and push down)
- - Save button saves current array of dictionaries as a deck
- - swipe to delete removes
- - link to this view from currentTopics plus sign
+ - Navigation to edit view from existing vs new topic
+ - Edit and save from existing topic
+ - Edit and save from new topic
+ - Display words + definitions in order added (adds to the top and push down)
 
  (2) Tab View
  - one tab for quick search w/swipe to add to set feature (display recent searches in list below quick search)
  - one tab for viewing current decks + deck creation
  - how to display most recent
  
- (3) FlashCardView
+ (3) FlashCardView // SKIP
  - add toggle for classic view and efficient view
  - efficient view is list, but on tap switches display of word vs definition, progress shown as colored bar along side, star to left of list item
  
@@ -121,76 +129,3 @@ func parseJSON(data: Data) throws -> Dictionary {
  (5) Color scheme, icon, dark mode
  
  */
-
-struct EditDeckView: View {
-    @State var dictionaries: [Dictionary] = []
-    @State var wordSearch: [String] = []
-    @State var word = ""
-    @State var showingAlert: Bool = false
-    @State var alertMessage = ""
-    
-    var body: some View {
-        NavigationStack {
-            VStack {
-                HStack{
-                    HStack{
-                        Image(systemName: "magnifyingglass")
-                        TextField("Search", text: $word, prompt: Text("Search"))
-                        Spacer()
-                    }
-                    wordSearchButton(wordSearch: $wordSearch, word: word, dictionaries: $dictionaries)
-                }
-                .padding(.horizontal)
-                List {
-                    Section("Searched words:") {
-                        ForEach(wordSearch, id: \.self){ w in
-                            Text(w)
-                        }
-                    }
-                }
-                List {
-                    ForEach(dictionaries) { dictionary in
-                        VStack(alignment: .leading){
-                            Text(dictionary.word)
-                                .font(.headline)
-                            let definitionArray = dictionary.definitions
-                            ForEach(definitionArray.indices, id: \.self) { index in
-                                Text("\(index+1). \(definitionArray[index].definition)")
-                                if let example = definitionArray[index].example {
-                                    Text("\"\(example)\"")
-                                        .italic()
-                                        .foregroundColor(.gray)
-                                }
-                            }
-                            
-                        }
-
-                        
-                    }
-                    
-                }
-            }
-            .navigationTitle("Definition Search")
-        }
-    }
-}
-
-
-struct wordSearchButton: View {
-    @Binding var wordSearch: [String]
-    let word: String
-    @Binding var dictionaries: [Dictionary]
-    
-    var body: some View {
-        Button("Search"){
-            wordSearch.append(word)
-            Task {
-                do {
-                    dictionaries = try await fetchAllDictionaries(words: wordSearch)
-                } catch {
-                    print("dictionaryView error: \(error)")
-                }
-            }
-        }
-    }
-}

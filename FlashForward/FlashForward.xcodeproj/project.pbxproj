@@ -10,17 +10,11 @@
 		0849EE262ABDFEB700893EA0 /* VTabView in Frameworks */ = {isa = PBXBuildFile; productRef = 0849EE252ABDFEB700893EA0 /* VTabView */; };
 		0886F7652A9078AF00D7E82C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCEF4F2A906D6600160E4E /* ContentView.swift */; };
 		0886F7692A907A3C00D7E82C /* CurrentTopicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F7682A907A3C00D7E82C /* CurrentTopicsView.swift */; };
-		0886F76C2A907A6100D7E82C /* TopicCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F76B2A907A6100D7E82C /* TopicCard.swift */; };
-		0886F76E2A907A7100D7E82C /* TopicProgressCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F76D2A907A7100D7E82C /* TopicProgressCard.swift */; };
 		0886F7702A907AA000D7E82C /* FlashCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F76F2A907AA000D7E82C /* FlashCard.swift */; };
-		0886F7722A907ADC00D7E82C /* AllTopicsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F7712A907ADC00D7E82C /* AllTopicsListView.swift */; };
 		0886F7742A907AF400D7E82C /* FlashCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F7732A907AF400D7E82C /* FlashCardView.swift */; };
-		0886F7762A907B1800D7E82C /* EndFlashCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F7752A907B1800D7E82C /* EndFlashCardView.swift */; };
 		0886F7792A907BC700D7E82C /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F7782A907BC600D7E82C /* Topic.swift */; };
 		0886F77B2A907BDE00D7E82C /* TopicItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F77A2A907BDE00D7E82C /* TopicItem.swift */; };
 		0886F77D2A907C0300D7E82C /* TopicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F77C2A907C0300D7E82C /* TopicManager.swift */; };
-		0886F77F2A96586F00D7E82C /* FlashCardEditable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F77E2A96586F00D7E82C /* FlashCardEditable.swift */; };
-		0886F7812A96588000D7E82C /* EditFlashCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F7802A96588000D7E82C /* EditFlashCardView.swift */; };
 		08DCEF4E2A906D6600160E4E /* FlashForwardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCEF4D2A906D6600160E4E /* FlashForwardApp.swift */; };
 		08DCEF522A906D6900160E4E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08DCEF512A906D6900160E4E /* Assets.xcassets */; };
 		08DCEF552A906D6900160E4E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08DCEF542A906D6900160E4E /* Preview Assets.xcassets */; };
@@ -29,17 +23,11 @@
 
 /* Begin PBXFileReference section */
 		0886F7682A907A3C00D7E82C /* CurrentTopicsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentTopicsView.swift; sourceTree = "<group>"; };
-		0886F76B2A907A6100D7E82C /* TopicCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicCard.swift; sourceTree = "<group>"; };
-		0886F76D2A907A7100D7E82C /* TopicProgressCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicProgressCard.swift; sourceTree = "<group>"; };
 		0886F76F2A907AA000D7E82C /* FlashCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCard.swift; sourceTree = "<group>"; };
-		0886F7712A907ADC00D7E82C /* AllTopicsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTopicsListView.swift; sourceTree = "<group>"; };
 		0886F7732A907AF400D7E82C /* FlashCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardView.swift; sourceTree = "<group>"; };
-		0886F7752A907B1800D7E82C /* EndFlashCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndFlashCardView.swift; sourceTree = "<group>"; };
 		0886F7782A907BC600D7E82C /* Topic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Topic.swift; sourceTree = "<group>"; };
 		0886F77A2A907BDE00D7E82C /* TopicItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicItem.swift; sourceTree = "<group>"; };
 		0886F77C2A907C0300D7E82C /* TopicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicManager.swift; sourceTree = "<group>"; };
-		0886F77E2A96586F00D7E82C /* FlashCardEditable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashCardEditable.swift; sourceTree = "<group>"; };
-		0886F7802A96588000D7E82C /* EditFlashCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFlashCardView.swift; sourceTree = "<group>"; };
 		08DCEF4A2A906D6600160E4E /* FlashForward.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashForward.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08DCEF4D2A906D6600160E4E /* FlashForwardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashForwardApp.swift; sourceTree = "<group>"; };
 		08DCEF4F2A906D6600160E4E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -66,10 +54,7 @@
 				0886F76A2A907A4600D7E82C /* Components */,
 				08DCEF4F2A906D6600160E4E /* ContentView.swift */,
 				0886F7682A907A3C00D7E82C /* CurrentTopicsView.swift */,
-				0886F7712A907ADC00D7E82C /* AllTopicsListView.swift */,
 				0886F7732A907AF400D7E82C /* FlashCardView.swift */,
-				0886F7752A907B1800D7E82C /* EndFlashCardView.swift */,
-				0886F7802A96588000D7E82C /* EditFlashCardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -77,10 +62,7 @@
 		0886F76A2A907A4600D7E82C /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				0886F76B2A907A6100D7E82C /* TopicCard.swift */,
-				0886F76D2A907A7100D7E82C /* TopicProgressCard.swift */,
 				0886F76F2A907AA000D7E82C /* FlashCard.swift */,
-				0886F77E2A96586F00D7E82C /* FlashCardEditable.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -211,18 +193,12 @@
 				0886F7702A907AA000D7E82C /* FlashCard.swift in Sources */,
 				08F57C3B2AC0EF3C00926229 /* Data.swift in Sources */,
 				0886F77B2A907BDE00D7E82C /* TopicItem.swift in Sources */,
-				0886F77F2A96586F00D7E82C /* FlashCardEditable.swift in Sources */,
-				0886F7812A96588000D7E82C /* EditFlashCardView.swift in Sources */,
-				0886F7722A907ADC00D7E82C /* AllTopicsListView.swift in Sources */,
 				0886F77D2A907C0300D7E82C /* TopicManager.swift in Sources */,
 				0886F7742A907AF400D7E82C /* FlashCardView.swift in Sources */,
 				0886F7652A9078AF00D7E82C /* ContentView.swift in Sources */,
-				0886F76C2A907A6100D7E82C /* TopicCard.swift in Sources */,
 				0886F7792A907BC700D7E82C /* Topic.swift in Sources */,
-				0886F76E2A907A7100D7E82C /* TopicProgressCard.swift in Sources */,
 				08DCEF4E2A906D6600160E4E /* FlashForwardApp.swift in Sources */,
 				0886F7692A907A3C00D7E82C /* CurrentTopicsView.swift in Sources */,
-				0886F7762A907B1800D7E82C /* EndFlashCardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

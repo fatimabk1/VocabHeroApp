@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FlashCard: View {
-    let item: TopicItem
+    let item: Topic.TopicItem
     
     @State var isFaceUp: Bool = true
     @State var cardRotation: Double = 0.0
@@ -42,7 +42,7 @@ struct FlashCard: View {
 
 struct Card: View {
     @Binding var isFaceUp: Bool
-    let item: TopicItem
+    let item: Topic.TopicItem
     
     var body: some View  {
         ZStack{
@@ -90,7 +90,7 @@ struct Content: View {
 struct FlashCard_Previews: PreviewProvider {
     static var previews: some View {
         let d = Dictionary(word: "hello", definitions: [Definition(definition: "a definition", example: "an example")])
-        let item = TopicItem(dictionary: d, order: 0)
+        let item = Topic.TopicItem(dictionary: d, order: 0)
         FlashCard(item: item)
     }
 }

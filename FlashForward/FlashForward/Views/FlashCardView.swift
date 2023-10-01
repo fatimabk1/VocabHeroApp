@@ -135,7 +135,7 @@ struct flashcardProgressDisplay: View {
 struct FlashCardView_Previews: PreviewProvider {
     
     static var previews: some View {
-        @StateObject var manager = TopicManager(makeFlashCards: true)
+        @StateObject var manager = TopicManager()
 
         FlashCardView(topic: $manager.topics[0])
             .environmentObject(manager)

@@ -23,10 +23,11 @@ struct FlashForwardApp: App {
 
 //@main
 //struct FlashForwardApp: App {
-//
+//    @StateObject var manager = AManager()
 //    var body: some Scene {
 //        WindowGroup {
-//            dictionaryView()
+//            Playground()
+//                .environmentObject(manager)
 //        }
 //    }
 //}
