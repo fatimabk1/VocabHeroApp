@@ -50,6 +50,7 @@ struct SimpleEditDeckView: View {
     @State var config: Config
     @State var additions: [Dictionary] = []
     @State var newTopic = Topic()
+    @State var emptyDeckAlert = false
     
     init(topic: Binding<Topic>, isPresented: Binding<Bool>, isNewTopic: Bool, source: String) {
         _topic = topic
@@ -120,9 +121,16 @@ struct SimpleEditDeckView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button("Save"){
-                        saveConfig(topic: &topic, config: &config, isNewTopic: isNewTopic)
-                        isPresented = false
-                        dismiss()
+                        if config.flashcards.count == 0 {
+                            emptyDeckAlert = true
+                        } else {
+                            saveConfig(topic: &topic, config: &config, isNewTopic: isNewTopic)
+                            isPresented = false
+                            dismiss()
+                        }
+                    }
+                    .alert(isPresented: $emptyDeckAlert) {
+                        Alert(title: Text("Unable to Save Changes"), message: Text("Decks must have at least one flashcard."))
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
@@ -282,20 +290,24 @@ struct topicListRow: View {
     let isEditing: Bool
     
     var body: some View {
-        HStack {
-            Text("\(topic.emoji) ")
-                .font(.title)
-            VStack(alignment: .leading){
-                Text(topic.name)
-                    .foregroundColor(.black)
-                Text("Completed \(topic.progress)/\(topic.total)")
-                    .font(.callout)
-                    .foregroundColor(.gray)
-            }
-            Spacer()
-            if !isEditing {
+        VStack {
+            HStack {
+                Text("\(topic.emoji) ")
+                    .font(.title)
+                VStack(alignment: .leading){
+                    Text(topic.name)
+                        .foregroundColor(.black)
+                    Text("Completed \(topic.progress)/\(topic.total)")
+                        .font(.callout)
+                        .foregroundColor(.gray)
+                }
+                Spacer()
                 circularProgress(progress: topic.progressIndicatorValue)
                     .frame(height: 30)
+            }
+            if topic.flashCards.count == 0 {
+                Text("Add cards to enable this deck")
+                    .font(.footnote)
             }
         }
     }

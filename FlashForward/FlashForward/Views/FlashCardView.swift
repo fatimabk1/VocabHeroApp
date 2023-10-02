@@ -43,11 +43,9 @@ struct FlashCardView: View {
                 flashcardProgressDisplay(topic: $topic)
                     .padding(.horizontal)
             }
-            .navigationTitle("\(topic.name)") // TODO: reduce font size ?
-//            .navigationBarHidden(true)
+            .navigationTitle("\(topic.name)")
             .navigationBarTitleDisplayMode(.inline)
             HStack {
-    
                 ShuffleButton(topic: $topic, shuffle: $topic.shuffled)
                     .frame(maxWidth: .infinity)
                 ReviewButton(review: $topic.flashCards[flashCardIndex].review)

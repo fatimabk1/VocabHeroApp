@@ -66,7 +66,7 @@ struct Topic: Identifiable, Equatable, Hashable {
         self.shuffled = false
         if makeFlashCards {
             for index in 0..<5 {
-                addFlashCard(dictionary: Dictionary(word: "\(index)", definitions: [Definition(definition: "def", example: "example")]))
+                addFlashCard(dictionary: Dictionary(word: "\(index + 1)", definitions: [Definition(definition: "def", example: "example")]))
             }
         }
     }
