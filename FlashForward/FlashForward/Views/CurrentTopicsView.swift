@@ -19,26 +19,44 @@ struct Config {
         let orderIndex = orderIndexArray.max() ?? 0
         return (orderIndex > 0) ? (orderIndex + 1) : orderIndex
     }
-
+    
     init(topic: Topic? = nil) {
         let baseTopic = topic ?? Topic()
         name = baseTopic.name
         emoji = baseTopic.emoji
         flashcards = baseTopic.flashCards
     }
+    
+    func toStr() -> String {
+        var text = "\(emoji) \(name):"
+        for card in flashcards {
+            text += "\n \(card.toStr())"
+        }
+        return text
+    }
 }
 
 struct SimpleEditDeckView: View {
     @EnvironmentObject var manager: TopicManager
-    @Binding var topic: Topic?
-    @State var newTopic = Topic()
-    var isNewTopic: Bool { topic != nil ? false : true }
+    @Environment(\.dismiss) var dismiss
+    
+    // received from above
+    @Binding var topic: Topic
+    @Binding var isPresented: Bool
+    let isNewTopic: Bool
+    let source: String
+    
+    // local to view
     @State var config: Config
     @State var additions: [Dictionary] = []
+    @State var newTopic = Topic()
     
-    init(topic: Binding<Topic?>) {
+    init(topic: Binding<Topic>, isPresented: Binding<Bool>, isNewTopic: Bool, source: String) {
         _topic = topic
-        _config = State(initialValue: topic.wrappedValue != nil ? Config(topic: topic.wrappedValue!) : Config())
+        _config = State(initialValue: Config(topic: topic.wrappedValue))
+        _isPresented = isPresented
+        self.isNewTopic = isNewTopic
+        self.source = source
     }
     
     func saveConfig(topic: inout Topic, config: inout Config, isNewTopic: Bool){
@@ -56,7 +74,7 @@ struct SimpleEditDeckView: View {
     }
     
     var body: some View {
-        VStack {
+        NavigationStack {
             Form {
                 Section("Title") {
                     HStack {
@@ -72,7 +90,6 @@ struct SimpleEditDeckView: View {
                         TextField(emoji, text: $config.emoji)
                     }
                 }
- 
                 List {
                     Section("Flashcards") {
                         AddCardRow(config: $config)
@@ -92,12 +109,29 @@ struct SimpleEditDeckView: View {
                     }
                 }
             }
-        }
-        Button("Save"){
-            if isNewTopic {
-                saveConfig(topic: &newTopic, config: &config, isNewTopic: isNewTopic)
-            } else {
-                saveConfig(topic: &topic!, config: &config, isNewTopic: isNewTopic)
+            .environment(\.defaultMinListRowHeight, 50)
+            .onAppear(){
+                print(source)
+                print("isNewTopic = \(isNewTopic ? "true" : "false")")
+                print(topic.toStr())
+                print("Config:")
+                print(config.toStr())
+            }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Save"){
+                        saveConfig(topic: &topic, config: &config, isNewTopic: isNewTopic)
+                        isPresented = false
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        isPresented = false
+                        dismiss()
+                    }
+                    .foregroundColor(.red)
+                }
             }
         }
     }
@@ -135,7 +169,6 @@ struct AddCardRow: View {
         }
     }
 }
-
 
 struct DisclosureGroupContent: View {
     let definitionArray: [Definition]
@@ -177,43 +210,59 @@ struct EditDeckListRow: View {
 struct CurrentTopicsView: View {
     @EnvironmentObject var manager: TopicManager
     @State var isEditing = false
+    @State var newEditIsPresented = false
+    @State var existingEditIsPresented = false
+    @State var newTopic = Topic()
+    @State var editTopic: Binding<Topic>? = nil
     
     var body: some View {
         NavigationStack {
-            List($manager.topics) { $topic in
-                NavigationLink {
-                    if isEditing {
-                        SimpleEditDeckView(topic: Binding($topic))
-                            .onDisappear(){
-                                isEditing.toggle()
+            List {
+                ForEach($manager.topics) { $topic in
+                    NavigationLink(destination: FlashCardView(topic: $topic)) {
+                        topicListRow(topic: $topic, isEditing: true)
+                            .contextMenu {
+                                Button(role: .none) {
+                                    editTopic = $topic
+                                    existingEditIsPresented.toggle()
+                                } label: {
+                                    Label("Edit", systemImage: "pencil")
+                                }
+                                Button(role: .destructive) {
+                                    manager.removeSet(topic)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                                .tint(.red)
                             }
-                        
-                    } else {
-                        FlashCardView(topic: $topic)
                     }
-                } label: {
-                    topicListRow(topic: $topic)
                 }
+            }
+            .sheet(item: $editTopic) { $topic in
+                SimpleEditDeckView(topic: $topic, isPresented: $existingEditIsPresented, isNewTopic: false, source: "from edit existing")
             }
             .environment(\.defaultMinListRowHeight, 70)
             .listStyle(.inset)
-            Button(isEditing ? "Cancel" : "Edit"){
-                isEditing.toggle()
-            }
-            .navigationTitle(isEditing ? "Editing Current Topics" : "Current Topics")
             .toolbar {
                 // button to add new deck
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink {
-                        SimpleEditDeckView(topic: .constant(nil))
+                    Button {
+                        newEditIsPresented = true
                     } label: {
                         HStack {
                             Image(systemName: "plus.circle")
                                 .font(.body)
                         }.padding()
                     }
+                    .sheet(isPresented: $newEditIsPresented) {
+                        SimpleEditDeckView(topic: $newTopic, isPresented: $newEditIsPresented, isNewTopic: true, source: "from edit NEW")
+                            .onDisappear() {
+                                newTopic = Topic()
+                            }
+                    }
                 }
             }
+            .navigationTitle("Current Topics")
         }
     }
 }
@@ -230,6 +279,8 @@ struct emptyStatePrompt: View {
 
 struct topicListRow: View {
     @Binding var topic: Topic
+    let isEditing: Bool
+    
     var body: some View {
         HStack {
             Text("\(topic.emoji) ")
@@ -242,8 +293,10 @@ struct topicListRow: View {
                     .foregroundColor(.gray)
             }
             Spacer()
-            circularProgress(progress: topic.progressIndicatorValue)
-                .frame(height: 30)
+            if !isEditing {
+                circularProgress(progress: topic.progressIndicatorValue)
+                    .frame(height: 30)
+            }
         }
     }
 }
