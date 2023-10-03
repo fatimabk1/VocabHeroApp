@@ -12,8 +12,6 @@ struct FlashCard: View {
     
     @State var isFaceUp: Bool = true
     @State var cardRotation: Double = 0.0
-    
-//    @Binding varcard: TopicItem
 
     var body: some View {
         ZStack {
@@ -45,14 +43,17 @@ struct Card: View {
     let item: Topic.TopicItem
     
     var body: some View  {
-        ZStack{
-            RoundedRectangle(cornerRadius: 20)
-                .fill(.teal)
-            RoundedRectangle(cornerRadius: 20)
-                .strokeBorder(.white, lineWidth: 5)
-                .shadow(color: .black, radius: 10)
-            Content(isFaceUp: $isFaceUp, content: item.dictionary)
-                .rotation3DEffect(.degrees(isFaceUp ? 0: 180), axis: (x: 0, y: 1, z: 0))
+        VStack {
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(.teal)
+                RoundedRectangle(cornerRadius: 20)
+                    .strokeBorder(.white, lineWidth: 5)
+                    .shadow(color: .black, radius: 10)
+                Content(isFaceUp: $isFaceUp, content: item.dictionary)
+                    .rotation3DEffect(.degrees(isFaceUp ? 0: 180), axis: (x: 0, y: 1, z: 0))
+            }
+            Text("Order: \(item.orderIndex)")
         }
     }
 }
@@ -89,8 +90,7 @@ struct Content: View {
 
 struct FlashCard_Previews: PreviewProvider {
     static var previews: some View {
-        let d = Dictionary(word: "hello", definitions: [Definition(definition: "a definition", example: "an example")])
-        let item = Topic.TopicItem(dictionary: d, order: 0)
-        FlashCard(item: item)
+        @StateObject var manager = TopicManager()
+        FlashCard(item: manager.topics[0].flashCards[0])
     }
 }

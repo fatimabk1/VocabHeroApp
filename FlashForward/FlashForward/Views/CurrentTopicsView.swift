@@ -111,13 +111,6 @@ struct SimpleEditDeckView: View {
                 }
             }
             .environment(\.defaultMinListRowHeight, 50)
-            .onAppear(){
-                print(source)
-                print("isNewTopic = \(isNewTopic ? "true" : "false")")
-                print(topic.toStr())
-                print("Config:")
-                print(config.toStr())
-            }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button("Save"){
@@ -289,26 +282,33 @@ struct topicListRow: View {
     @Binding var topic: Topic
     let isEditing: Bool
     
+    // TODO: display 0/total before viewed deck once, then 1/total
     var body: some View {
+        let progress = topic.viewedDeck ? ((topic.shuffled ? topic.lastShuffledCard : topic.lastOrderedCard) + 1) : 0
         VStack {
             HStack {
                 Text("\(topic.emoji) ")
                     .font(.title)
-                VStack(alignment: .leading){
+                VStack(alignment: .leading) {
                     Text(topic.name)
                         .foregroundColor(.black)
-                    Text("Completed \(topic.progress)/\(topic.total)")
+                    Text("Completed \(progress)/\(topic.total)")
                         .font(.callout)
                         .foregroundColor(.gray)
                 }
                 Spacer()
-                circularProgress(progress: topic.progressIndicatorValue)
+                circularProgress(progress: Double(progress) / Double(topic.total))
                     .frame(height: 30)
             }
-            if topic.flashCards.count == 0 {
+            if topic.total == 0 {
                 Text("Add cards to enable this deck")
                     .font(.footnote)
             }
+        }
+        .onAppear() {
+            print("\(topic.viewedDeck ? "viewed" : "not viewed")")
+            print("\(topic.shuffled ? "shuffled = \(topic.lastShuffledCard)" : "ordered = \(topic.lastOrderedCard)")")
+            print("progress = \(progress)")
         }
     }
 }

@@ -15,43 +15,22 @@ struct Topic: Identifiable, Equatable, Hashable {
     var emoji: String
     
     // set details
-    private var _progress = 0
-    var progress: Int {
-        get { return _progress }
-        set {
-            if newValue > total {
-                _progress = total
-            } else if newValue < 0 {
-                _progress = 0
-            } else {
-                _progress = newValue
-            }
-        }
-    }
-
-    var progressIndicatorValue: Double {
-        if (total == 0){
-            return 0
-        } else {
-            return Double(progress) / Double(total)
-        }
-    }
-    
+    var viewedDeck = false // tracks whether or not we've started the deck
     var flashCards: [TopicItem]
     var total: Int { self.flashCards.count }
-    var mostRecentFlashCard: UUID // TODO: change to computed property by touched timestamp
+    var lastShuffledCard: Int = 0
+    var lastOrderedCard: Int = 0
     var shuffled: Bool
 
-    
     func toStr() -> String {
-        var str = "\(emoji) \(name): \(progress) / \(total) completed"
+        var str = "\(emoji) \(name): \(lastOrderedCard) / \(total) completed"
         for card in flashCards {
             str += "\n\t" + "\(card.toStr())"
         }
         return str
     }
     func printTopic() {
-        print("Topic \(emoji) \(name): \(progress) / \(total) completed")
+        print("Topic \(emoji) \(name): \(lastOrderedCard) / \(total) completed")
         for card in flashCards {
             print("\t" + "\(card.toStr())")
         }
@@ -62,27 +41,18 @@ struct Topic: Identifiable, Equatable, Hashable {
         self.name = name
         self.emoji = emoji
         self.flashCards = []
-        self.mostRecentFlashCard = self.id
         self.shuffled = false
         if makeFlashCards {
             for index in 0..<5 {
-                addFlashCard(dictionary: Dictionary(word: "\(index + 1)", definitions: [Definition(definition: "def", example: "example")]))
-            }
-        }
-    }
-    
-    mutating func markCardAsViewed(_ card: TopicItem) {
-        if let index = flashCards.firstIndex(where: { $0.id == card.id }){
-            if !flashCards[index].viewed {
-                flashCards[index].viewed = true
-                progress += 1
+                addFlashCard(dictionary: Dictionary(word: "\(index)", definitions: [Definition(definition: "def", example: "example")]))
             }
         }
     }
 
     mutating func addFlashCard(dictionary: Dictionary) {
         let orderIndexArray = self.flashCards.map { $0.orderIndex }
-        let orderIndex = orderIndexArray.max() ?? 0 // TODO: FIX - wrong, should be highest + 1
+        let maxOrderIndex = (orderIndexArray.max() ?? -1)  // TODO: FIX - wrong, should be highest + 1
+        let orderIndex = maxOrderIndex + 1
         let item = Topic.TopicItem(dictionary: dictionary, order: orderIndex)
         self.flashCards.append(item)
     }
@@ -90,17 +60,17 @@ struct Topic: Identifiable, Equatable, Hashable {
     mutating func removeFlashCard(_ card: TopicItem) {
         let flashcardIndex = self.flashCards.firstIndex(where: {$0.id == card.id})
         if let flashcardIndex = flashcardIndex {
-            if card.viewed {
-                self._progress -= 1
+            if flashcardIndex <= lastOrderedCard {
+                lastOrderedCard -= 1
             }
-            let prevFlashCardIndex = (flashcardIndex - 1) > -1 ? (flashcardIndex - 1) : 0
-            self.mostRecentFlashCard = self.flashCards[prevFlashCardIndex].id
+            if flashcardIndex <= lastShuffledCard {
+                lastShuffledCard -= 1
+            }
             self.flashCards.remove(at: flashcardIndex)
         } else {
             print("ERROR: flashcard not found")
             return
         }
-        
     }
     
     static func ==(lhs: Topic, rhs: Topic) -> Bool{
