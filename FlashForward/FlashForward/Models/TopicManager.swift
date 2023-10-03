@@ -13,7 +13,7 @@ class TopicManager: ObservableObject {
     @Published var topics: [Topic]
     
     init() {
-        self.topics = [Topic(name: "Topic A", emoji: "🐥", makeFlashCards: true)]
+        self.topics = [Topic.sampleTopic]
     }
     
     func addSet(_ t: Topic) {

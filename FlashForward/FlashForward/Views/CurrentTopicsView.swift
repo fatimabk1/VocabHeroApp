@@ -151,6 +151,7 @@ struct AddCardRow: View {
                 TextField("", text: $searchTerm)
                     .onSubmit {
                         failedSearchTerm = nil
+                        // TODO: remove preceding/trailing spaces around search term
                         let currentWord = searchTerm
                         Task {
                             do {

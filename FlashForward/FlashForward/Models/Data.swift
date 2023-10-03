@@ -105,27 +105,3 @@ func parseJSON(data: Data) throws -> Dictionary {
         throw FetchError.parseFailed
     }
 }
-
-// TODO: START HERE -
-/*
- 
- (1) EditDeckView
- - Navigation to edit view from existing vs new topic
- - Edit and save from existing topic
- - Edit and save from new topic
- - Display words + definitions in order added (adds to the top and push down)
-
- (2) Tab View
- - one tab for quick search w/swipe to add to set feature (display recent searches in list below quick search)
- - one tab for viewing current decks + deck creation
- - how to display most recent
- 
- (3) FlashCardView // SKIP
- - add toggle for classic view and efficient view
- - efficient view is list, but on tap switches display of word vs definition, progress shown as colored bar along side, star to left of list item
- 
- (4) Persist Data
- 
- (5) Color scheme, icon, dark mode
- 
- */

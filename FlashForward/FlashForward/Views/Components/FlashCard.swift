@@ -35,7 +35,6 @@ struct FlashCard: View {
             isFaceUp.toggle()
         }
     }
-
 }
 
 struct Card: View {
@@ -53,10 +52,11 @@ struct Card: View {
                 Content(isFaceUp: $isFaceUp, content: item.dictionary)
                     .rotation3DEffect(.degrees(isFaceUp ? 0: 180), axis: (x: 0, y: 1, z: 0))
             }
-            Text("Order: \(item.orderIndex)")
         }
     }
 }
+
+
 
 struct Content: View {
     @Binding var isFaceUp: Bool
@@ -66,31 +66,39 @@ struct Content: View {
         Group {
             if isFaceUp {
                 Text(content.word)
+                    .font(.largeTitle)
+                    .fixedSize(horizontal: false, vertical: true)
             } else {
                 VStack(alignment: .leading){
-                    Text(content.word)
-                        .font(.headline)
+                    // display first three definitions for now
+                    // TODO: FEATURE - user can choose which definitions to add
                     let definitionArray = content.definitions
-                    ForEach(definitionArray.indices, id: \.self) { index in
-                        Text("\(index+1). \(definitionArray[index].definition)")
-                        if let example = definitionArray[index].example {
-                            Text("\"\(example)\"")
-                                .italic()
-                                .foregroundColor(.gray)
+                    ForEach(0..<3) { index in
+                        if index < definitionArray.count {
+                            VStack(alignment: .leading) {
+                                Text("\(index+1). \(definitionArray[index].definition)")
+                                    .font(.headline)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                if let example = definitionArray[index].example {
+                                    Text("\"\(example)\"\n")
+                                        .italic()
+                                        .font(.body)
+                                        .fixedSize(horizontal: false, vertical: false)
+                                }
+                            }
                         }
                     }
                 }
             }
         }
         .foregroundColor(.white)
-        .font(.title)
         .padding(30)
     }
 }
 
+
 struct FlashCard_Previews: PreviewProvider {
     static var previews: some View {
-        @StateObject var manager = TopicManager()
-        FlashCard(item: manager.topics[0].flashCards[0])
+        FlashCard(item: Topic.sampleTopic.flashCards[4])
     }
 }
