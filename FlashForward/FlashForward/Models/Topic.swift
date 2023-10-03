@@ -44,7 +44,8 @@ struct Topic: Identifiable, Equatable, Hashable {
         self.shuffled = false
         if makeFlashCards {
             for index in 0..<5 {
-                addFlashCard(dictionary: Dictionary(word: "\(index)", definitions: [Definition(definition: "def", example: "example")]))
+                let wordInput = (index == 0 || index == 4) ? "Starred \(index)" : "\(index)"
+                addFlashCard(dictionary: Dictionary(word: wordInput, definitions: [Definition(definition: "def", example: "example")]))
             }
         }
     }

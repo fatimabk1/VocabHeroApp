@@ -19,31 +19,49 @@ struct FlashCardView: View {
     @Binding var topic: Topic
     @State var tag: Int = 0
     @State var reviewMode = false
-    @State var flashCardIndex = 0
+    @State var reviewProgress = 0 // the index of the current card in the subset of cards for review
+    @State var flashCardIndex = 0 // the index of the current card in the full deck shuffled/unshuffled
     
     var body: some View {
         NavigationStack {
             VStack {
                 VTabView(selection: $tag) {
-                    ForEach(0..<topic.total, id: \.self){ index in
-                        if (!reviewMode || (reviewMode && topic.flashCards[index].review)){
-                            FlashCard(item: topic.flashCards[index])
-                                .tag(topic.flashCards[index].id)
+                    if reviewMode {
+                        let reviewCards = topic.flashCards.filter { $0.review }
+                        ForEach(0..<reviewCards.count, id: \.self) { index in
+                            FlashCard(item: reviewCards[index])
+                                .tag(reviewCards[index].id)
                         }
-                   }
-                    .onChange(of: tag) { index in
-                        flashCardIndex = index
-                        if topic.shuffled {
-                            topic.lastShuffledCard = index
-                        } else {
-                            topic.lastOrderedCard = index
+                        .onAppear(){
+                            tag = 0 // reviewMode should always start at the beginning
+                        }
+                        .onChange(of: tag) { index in
+                            flashCardIndex = topic.flashCards.firstIndex(of: reviewCards[index])!
+                            reviewProgress = index
+                        }
+                    } else {
+                        ForEach(0..<topic.total, id: \.self) { index in
+                            if (!reviewMode || (reviewMode && topic.flashCards[index].review)){
+                                FlashCard(item: topic.flashCards[index])
+                                    .tag(topic.flashCards[index].id)
+                            }
+                        }
+                        .onChange(of: tag) { index in
+                            // only update resume point in deck during regular modes
+                            flashCardIndex = index
+                            if topic.shuffled {
+                                topic.lastShuffledCard = index
+                            } else {
+                                topic.lastOrderedCard = index
+                            }
                         }
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 
                 let total = reviewMode ? topic.flashCards.filter({ $0.review}).count : topic.total
-                flashcardProgressDisplay(prog: flashCardIndex, total: total )
+                let prog = reviewMode ? reviewProgress : flashCardIndex
+                flashcardProgressDisplay(prog: prog, total: total )
                     .padding(.horizontal)
             }
             .navigationTitle("\(topic.name)")
@@ -53,7 +71,7 @@ struct FlashCardView: View {
                     .frame(maxWidth: .infinity)
                 ReviewButton(review: $topic.flashCards[flashCardIndex].review)
                     .frame(maxWidth: .infinity)
-                ReviewModeToggle(topic: $topic, reviewMode: $reviewMode, tag: $tag)
+                ReviewModeToggle(topic: $topic, reviewMode: $reviewMode)
                     .frame(maxWidth: .infinity)
             }
         }
@@ -68,7 +86,6 @@ struct FlashCardView: View {
 struct ReviewModeToggle: View {
     @Binding var topic: Topic
     @Binding var reviewMode: Bool
-    @Binding var tag: Int
     
     var reviewCount: Int {
         topic.flashCards.filter{$0.review}.count
@@ -77,9 +94,7 @@ struct ReviewModeToggle: View {
     var body: some View {
         Button {
             if reviewCount > 0 {
-                tag = 0
                 reviewMode.toggle()
-                print("review mode setting tag to \(tag)")
             }
         } label: {
             Label("Review", systemImage: "eye")
