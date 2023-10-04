@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Topic: Identifiable, Equatable, Hashable {
+struct Topic: Identifiable, Equatable {
     // topic details
     var id: UUID
     var name: String
@@ -55,29 +55,13 @@ struct Topic: Identifiable, Equatable, Hashable {
         self.flashCards.append(item)
     }
     
-    mutating func removeFlashCard(_ card: TopicItem) {
-        let flashcardIndex = self.flashCards.firstIndex(where: {$0.id == card.id})
-        if let flashcardIndex = flashcardIndex {
-            if flashcardIndex <= lastOrderedCard {
-                lastOrderedCard -= 1
-            }
-            if flashcardIndex <= lastShuffledCard {
-                lastShuffledCard -= 1
-            }
-            self.flashCards.remove(at: flashcardIndex)
-        } else {
-            print("ERROR: flashcard not found")
-            return
-        }
-    }
+//    static func ==(lhs: Topic, rhs: Topic) -> Bool{
+//        return lhs.id == rhs.id
+//    }
     
-    static func ==(lhs: Topic, rhs: Topic) -> Bool{
-        return lhs.id == rhs.id
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
+//    func hash(into hasher: inout Hasher) {
+//        hasher.combine(id)
+//    }
     
 }
 

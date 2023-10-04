@@ -13,6 +13,8 @@ struct Config {
     var name = ""
     var emoji = ""
     var flashcards: [Topic.TopicItem] = []
+    var lastOrderedCard = 0
+    var lastShuffledCard = 0
     var additions: [Dictionary] = []
     var nextCardIndex: Int {
         let orderIndexArray = flashcards.map { $0.orderIndex }
@@ -24,7 +26,19 @@ struct Config {
         let baseTopic = topic ?? Topic()
         name = baseTopic.name
         emoji = baseTopic.emoji
+        lastOrderedCard = baseTopic.lastOrderedCard
+        lastShuffledCard = baseTopic.lastOrderedCard
         flashcards = baseTopic.flashCards
+    }
+    
+    mutating func removeFlashCard(at index: Int) {
+        if index <= lastOrderedCard {
+            lastOrderedCard = (lastOrderedCard == 0) ? 0 : (lastOrderedCard - 1)
+        }
+        if index <= lastShuffledCard {
+            lastShuffledCard = (lastShuffledCard == 0) ? 0 : (lastShuffledCard - 1)
+        }
+        self.flashcards.remove(at: index)
     }
     
     func toStr() -> String {
@@ -67,6 +81,8 @@ struct SimpleEditDeckView: View {
         for d in additions {
             topic.addFlashCard(dictionary: d)
         }
+        topic.lastOrderedCard = config.lastOrderedCard
+        topic.lastShuffledCard = config.lastShuffledCard
         topic.flashCards = config.flashcards
         
         if isNewTopic {
@@ -103,7 +119,8 @@ struct SimpleEditDeckView: View {
                                     Button(role: .destructive) {
                                         let index = config.flashcards.firstIndex(of: card)
                                         if let index {
-                                            config.flashcards.remove(at: index)
+                                            config.removeFlashCard(at: index)
+//                                            config.flashcards.remove(at: index)
                                         }
                                     } label: {
                                         Label("Delete", systemImage: "trash")
@@ -147,7 +164,7 @@ struct AddCardRow: View {
     @State var failedSearchTerm: String? = nil
     
     var body: some View {
-        VStack { // TODO: emphasize the new card row + make space for err msg
+        VStack {
             HStack {
                 Text("New Card: ")
                     .fontWeight(.semibold)
@@ -297,7 +314,6 @@ struct topicListRow: View {
     @Binding var topic: Topic
     let isEditing: Bool
     
-    // TODO: display 0/total before viewed deck once, then 1/total
     var body: some View {
         let progress = topic.viewedDeck ? ((topic.shuffled ? topic.lastShuffledCard : topic.lastOrderedCard) + 1) : 0
         VStack {
