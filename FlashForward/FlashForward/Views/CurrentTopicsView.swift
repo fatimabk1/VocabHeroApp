@@ -223,20 +223,21 @@ struct CurrentTopicsView: View {
                 ForEach($manager.topics) { $topic in
                     NavigationLink(destination: FlashCardView(topic: $topic)) {
                         topicListRow(topic: $topic, isEditing: true)
-                            .contextMenu {
-                                Button(role: .none) {
-                                    editTopic = $topic
-                                    existingEditIsPresented.toggle()
-                                } label: {
-                                    Label("Edit", systemImage: "pencil")
-                                }
+                            .swipeActions(content: {
                                 Button(role: .destructive) {
                                     manager.removeSet(topic)
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
                                 .tint(.red)
-                            }
+                                Button(role: .none) {
+                                    editTopic = $topic
+                                    existingEditIsPresented.toggle()
+                                } label: {
+                                    Label("Edit", systemImage: "pencil")
+                                }
+                                .tint(.yellow)
+                            })
                     }
                 }
             }
