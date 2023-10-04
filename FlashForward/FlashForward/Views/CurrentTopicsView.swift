@@ -89,6 +89,9 @@ struct SimpleEditDeckView: View {
                             .fontWeight(.semibold)
                         let emoji = config.emoji
                         TextField(emoji, text: $config.emoji)
+                        .onChange(of: config.emoji) { _ in
+                            config.emoji = String(config.emoji.prefix(1))
+                        }
                     }
                 }
                 List {
@@ -151,7 +154,7 @@ struct AddCardRow: View {
                 TextField("", text: $searchTerm)
                     .onSubmit {
                         failedSearchTerm = nil
-                        // TODO: remove preceding/trailing spaces around search term
+                        searchTerm = searchTerm.trimmingCharacters(in: .whitespaces)
                         let currentWord = searchTerm
                         Task {
                             do {
@@ -177,11 +180,11 @@ struct DisclosureGroupContent: View {
     @Binding var isExpanded: Bool
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             ForEach(definitionArray.indices, id: \.self) { index in
                 Text("\(index+1). \(definitionArray[index].definition)")
                 if let example = definitionArray[index].example {
-                    Text("\"\(example)\"")
+                    Text("\"\(example)\"\n")
                         .italic()
                         .foregroundColor(.gray)
                 }
@@ -199,7 +202,7 @@ struct EditDeckListRow: View {
             let definitionArray = card.dictionary.definitions
             DisclosureGroupContent(definitionArray: definitionArray, isExpanded: $isExpanded)
         } label: {
-            Button(card.dictionary.word) {
+            Button(card.dictionary.word.capitalized) {
                 withAnimation {
                     isExpanded.toggle()
                 }
@@ -214,8 +217,10 @@ struct CurrentTopicsView: View {
     @State var isEditing = false
     @State var newEditIsPresented = false
     @State var existingEditIsPresented = false
+    @State var deleteDeckAlert = false
     @State var newTopic = Topic()
     @State var editTopic: Binding<Topic>? = nil
+    @State var deleteTopic: Topic? = nil
     
     var body: some View {
         NavigationStack {
@@ -225,7 +230,8 @@ struct CurrentTopicsView: View {
                         topicListRow(topic: $topic, isEditing: true)
                             .swipeActions(content: {
                                 Button(role: .destructive) {
-                                    manager.removeSet(topic)
+                                    deleteTopic = topic
+                                    deleteDeckAlert = true
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
@@ -237,10 +243,17 @@ struct CurrentTopicsView: View {
                                     Label("Edit", systemImage: "pencil")
                                 }
                                 .tint(.yellow)
+                                
                             })
                     }
                 }
             }
+            .alert("This action cannot be undone.", isPresented: $deleteDeckAlert, presenting: deleteTopic, actions: { deleteTopic in
+                Button("delete", role: .destructive) {
+                    manager.removeSet(deleteTopic)
+                }
+                Button("cancel", role: .cancel) { deleteDeckAlert = false }
+            })
             .sheet(item: $editTopic) { $topic in
                 SimpleEditDeckView(topic: $topic, isPresented: $existingEditIsPresented, isNewTopic: false, source: "from edit existing")
             }
