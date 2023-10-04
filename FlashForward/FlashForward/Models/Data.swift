@@ -76,7 +76,6 @@ func fetchDictionary(word: String) async throws -> Dictionary {
         let dictionaryWord = try parseJSON(data: data)
         return dictionaryWord
     } catch {
-        print("fetchDictionary ERROR: \(error)")
         throw FetchError.requestFailed
     }
 }
@@ -88,7 +87,6 @@ func parseJSON(data: Data) throws -> Dictionary {
         
         if let firstDecodedData = decodedData.first {
             let word = firstDecodedData.word
-            print("WORD: \(word)")
             
             var definitionArray: [Definition] = []
             for meaning in firstDecodedData.meanings {
@@ -101,7 +99,6 @@ func parseJSON(data: Data) throws -> Dictionary {
             throw FetchError.parseFailed
         }
     } catch {
-        print("parseDecodeJSON error: \(error)")
         throw FetchError.parseFailed
     }
 }

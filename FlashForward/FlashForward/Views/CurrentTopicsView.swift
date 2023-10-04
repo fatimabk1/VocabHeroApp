@@ -12,6 +12,7 @@ import SwiftUI
 struct Config {
     var name = ""
     var emoji = ""
+    var viewedDeck = false
     var flashcards: [Topic.TopicItem] = []
     var lastOrderedCard = 0
     var lastShuffledCard = 0
@@ -26,6 +27,7 @@ struct Config {
         let baseTopic = topic ?? Topic()
         name = baseTopic.name
         emoji = baseTopic.emoji
+        viewedDeck = baseTopic.viewedDeck
         lastOrderedCard = baseTopic.lastOrderedCard
         lastShuffledCard = baseTopic.lastOrderedCard
         flashcards = baseTopic.flashCards
@@ -33,10 +35,18 @@ struct Config {
     
     mutating func removeFlashCard(at index: Int) {
         if index <= lastOrderedCard {
-            lastOrderedCard = (lastOrderedCard == 0) ? 0 : (lastOrderedCard - 1)
+            if lastOrderedCard == 0 {
+                viewedDeck = false
+            } else {
+                lastOrderedCard = lastOrderedCard - 1
+            }
         }
         if index <= lastShuffledCard {
-            lastShuffledCard = (lastShuffledCard == 0) ? 0 : (lastShuffledCard - 1)
+             if lastShuffledCard == 0 {
+                viewedDeck = false
+            } else {
+                lastShuffledCard = lastShuffledCard - 1
+            }
         }
         self.flashcards.remove(at: index)
     }
@@ -75,9 +85,9 @@ struct SimpleEditDeckView: View {
     }
     
     func saveConfig(topic: inout Topic, config: inout Config, isNewTopic: Bool){
-        // TODO: make sure that everything in topic that should be updated gets updated
         topic.name = config.name
         topic.emoji = config.emoji
+        topic.viewedDeck = config.viewedDeck
         for d in additions {
             topic.addFlashCard(dictionary: d)
         }
@@ -335,11 +345,6 @@ struct topicListRow: View {
                 Text("Add cards to enable this deck")
                     .font(.footnote)
             }
-        }
-        .onAppear() {
-            print("\(topic.viewedDeck ? "viewed" : "not viewed")")
-            print("\(topic.shuffled ? "shuffled = \(topic.lastShuffledCard)" : "ordered = \(topic.lastOrderedCard)")")
-            print("progress = \(progress)")
         }
     }
 }
