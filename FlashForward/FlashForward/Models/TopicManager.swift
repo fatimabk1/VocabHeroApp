@@ -13,7 +13,8 @@ class TopicManager: ObservableObject {
     @Published var topics: [Topic]
     
     init() {
-        self.topics = [Topic.sampleTopic]
+        self.topics = []
+//        self.topics = [Topic.sampleTopic]
     }
     
     func addSet(_ t: Topic) {

@@ -254,42 +254,59 @@ struct CurrentTopicsView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach($manager.topics) { $topic in
-                    NavigationLink(destination: FlashCardView(topic: $topic)) {
-                        topicListRow(topic: $topic, isEditing: true)
-                            .swipeActions(content: {
-                                Button(role: .destructive) {
-                                    deleteTopic = topic
-                                    deleteDeckAlert = true
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                                .tint(Color("Trash"))
-                                Button(role: .none) {
-                                    editTopic = $topic
-                                    existingEditIsPresented.toggle()
-                                } label: {
-                                    Label("Edit", systemImage: "pencil")
-                                }
-                                .tint(Color("Edit"))
-                                
-                            })
+            Group {
+                if manager.topics.count == 0 {
+                    ZStack {
+                        Image("NoDecksEmptyState")
+                            .resizable()
+//                            .scaledToFill()
+                            .frame(width: 500)
+                            .offset(x: 70, y: 50)
+                        Text("No decks here.")
+                            .font(.title)
+                            .padding()
+                            .fixedSize(horizontal: false, vertical: true)
+                            .offset(x: -50, y: -120)
                     }
-                    .listRowSeparatorTint(Color(.gray))
+                } else {
+                    List {
+                        ForEach($manager.topics) { $topic in
+                            NavigationLink(destination: FlashCardView(topic: $topic)) {
+                                topicListRow(topic: $topic, isEditing: true)
+                                    .swipeActions(content: {
+                                        Button(role: .destructive) {
+                                            deleteTopic = topic
+                                            deleteDeckAlert = true
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                        .tint(Color("Trash"))
+                                        Button(role: .none) {
+                                            editTopic = $topic
+                                            existingEditIsPresented.toggle()
+                                        } label: {
+                                            Label("Edit", systemImage: "pencil")
+                                        }
+                                        .tint(Color("Edit"))
+                                        
+                                    })
+                            }
+                            .listRowSeparatorTint(Color(.gray))
+                        }
+                    }
+                    .alert("This action cannot be undone.", isPresented: $deleteDeckAlert, presenting: deleteTopic, actions: { deleteTopic in
+                        Button("delete", role: .destructive) {
+                            manager.removeSet(deleteTopic)
+                        }
+                        Button("cancel", role: .cancel) { deleteDeckAlert = false }
+                    })
+                    .sheet(item: $editTopic) { $topic in
+                        SimpleEditDeckView(topic: $topic, isPresented: $existingEditIsPresented, isNewTopic: false, source: "from edit existing")
+                    }
+                    .environment(\.defaultMinListRowHeight, 70)
+                    .listStyle(.inset)
                 }
             }
-            .alert("This action cannot be undone.", isPresented: $deleteDeckAlert, presenting: deleteTopic, actions: { deleteTopic in
-                Button("delete", role: .destructive) {
-                    manager.removeSet(deleteTopic)
-                }
-                Button("cancel", role: .cancel) { deleteDeckAlert = false }
-            })
-            .sheet(item: $editTopic) { $topic in
-                SimpleEditDeckView(topic: $topic, isPresented: $existingEditIsPresented, isNewTopic: false, source: "from edit existing")
-            }
-            .environment(\.defaultMinListRowHeight, 70)
-            .listStyle(.inset)
             .toolbar {
                 // button to add new deck
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -312,7 +329,7 @@ struct CurrentTopicsView: View {
                     }
                 }
             }
-            .navigationTitle("Current Topics")
+            .navigationTitle("Flashcard Decks")
         }
     }
 }

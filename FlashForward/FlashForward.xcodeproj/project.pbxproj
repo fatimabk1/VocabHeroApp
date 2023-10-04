@@ -48,6 +48,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0846B23A2ACDAD3B00DD012E /* Licenses and Attributions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Licenses and Attributions";
+			sourceTree = "<group>";
+		};
 		0886F7672A907A1400D7E82C /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -70,6 +77,7 @@
 		0886F7772A907BB700D7E82C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0846B23A2ACDAD3B00DD012E /* Licenses and Attributions */,
 				0886F7782A907BC600D7E82C /* Topic.swift */,
 				08F57C3A2AC0EF3B00926229 /* Data.swift */,
 				0886F77A2A907BDE00D7E82C /* TopicItem.swift */,

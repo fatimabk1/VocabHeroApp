@@ -28,16 +28,31 @@ struct FlashCardView: View {
                 VTabView(selection: $tag) {
                     if reviewMode {
                         let reviewCards = topic.flashCards.filter { $0.review }
-                        ForEach(0..<reviewCards.count, id: \.self) { index in
-                            FlashCard(item: reviewCards[index])
-                                .tag(reviewCards[index].id)
-                        }
-                        .onAppear(){
-                            tag = 0 // reviewMode should always start at the beginning
-                        }
-                        .onChange(of: tag) { index in
-                            flashCardIndex = topic.flashCards.firstIndex(of: reviewCards[index])!
-                            reviewProgress = index
+                        if reviewCards.count == 0 {
+                            ZStack {
+                                Image("NothingToReviewEmptyState")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 500)
+                                    .offset(x: 70, y: 50)
+                                Text("Nothing to review.")
+                                    .font(.title)
+                                    .padding()
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .offset(x: -70, y: -120)
+                            }
+                        } else {
+                            ForEach(0..<reviewCards.count, id: \.self) { index in
+                                FlashCard(item: reviewCards[index])
+                                    .tag(reviewCards[index].id)
+                            }
+                            .onAppear(){
+                                tag = 0 // reviewMode should always start at the beginning
+                            }
+                            .onChange(of: tag) { index in
+                                flashCardIndex = topic.flashCards.firstIndex(of: reviewCards[index])!
+                                reviewProgress = index
+                            }
                         }
                     } else {
                         ForEach(0..<topic.total, id: \.self) { index in
@@ -93,9 +108,7 @@ struct ReviewModeToggle: View {
     
     var body: some View {
         Button {
-            if reviewCount > 0 {
-                reviewMode.toggle()
-            }
+            reviewMode.toggle()
         } label: {
             Label("Review", systemImage: "eye")
                 .labelStyle(.titleAndIcon)
