@@ -99,7 +99,7 @@ struct ReviewModeToggle: View {
         } label: {
             Label("Review", systemImage: "eye")
                 .labelStyle(.titleAndIcon)
-                .foregroundColor(reviewMode ? .black : .gray)
+                .foregroundColor(reviewMode ? Color("On") : Color("Off"))
         }
     }
 }
@@ -125,7 +125,7 @@ struct ShuffleButton: View {
         } label: {
             Label("Shuffle", systemImage: "shuffle")
                 .labelStyle(.titleAndIcon)
-                .foregroundColor(topic.shuffled ? .black : .gray)
+                .foregroundColor(topic.shuffled ? Color("On") : Color("Off"))
         }
     }
 }
@@ -139,7 +139,7 @@ struct ReviewButton: View {
         } label: {
             Label("Star", systemImage: review ? "star.fill" : "star")
                 .labelStyle(.titleAndIcon)
-                .foregroundColor(review ? .black : .gray)
+                .foregroundColor(review ? Color("On") : Color("Off"))
         }
     }
 }
@@ -157,7 +157,7 @@ struct flashcardProgressDisplay: View {
                 Text("\(progressIndicatorValue * 100, specifier: "%.0f")%")
             }
         }
-        .tint(.teal)
+        .tint(Color("Theme"))
     }
 }
 

@@ -130,11 +130,11 @@ struct SimpleEditDeckView: View {
                                         let index = config.flashcards.firstIndex(of: card)
                                         if let index {
                                             config.removeFlashCard(at: index)
-//                                            config.flashcards.remove(at: index)
                                         }
                                     } label: {
                                         Label("Delete", systemImage: "trash")
                                     }
+                                    .tint(Color("Trash"))
                                 }
                         }
                     }
@@ -161,7 +161,7 @@ struct SimpleEditDeckView: View {
                         isPresented = false
                         dismiss()
                     }
-                    .foregroundColor(.red)
+                    .foregroundColor(Color("Trash"))
                 }
             }
         }
@@ -197,6 +197,7 @@ struct AddCardRow: View {
             if let failedSearchTerm = failedSearchTerm {
                 Text("No results for \"\(failedSearchTerm)\".")
                     .font(.callout)
+                    .foregroundColor(Color("Text2"))
             }
         }
     }
@@ -213,7 +214,7 @@ struct DisclosureGroupContent: View {
                 if let example = definitionArray[index].example {
                     Text("\"\(example)\"\n")
                         .italic()
-                        .foregroundColor(.gray)
+                        .foregroundColor(Color("Text2"))
                 }
             }
         }
@@ -234,13 +235,15 @@ struct EditDeckListRow: View {
                     isExpanded.toggle()
                 }
             }
-            .foregroundColor(.black)
+            .foregroundColor(Color("Text1"))
         }
     }
 }
 
 struct CurrentTopicsView: View {
     @EnvironmentObject var manager: TopicManager
+    @Environment(\.colorScheme) var colorScheme
+    
     @State var isEditing = false
     @State var newEditIsPresented = false
     @State var existingEditIsPresented = false
@@ -262,17 +265,18 @@ struct CurrentTopicsView: View {
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
-                                .tint(.red)
+                                .tint(Color("Trash"))
                                 Button(role: .none) {
                                     editTopic = $topic
                                     existingEditIsPresented.toggle()
                                 } label: {
                                     Label("Edit", systemImage: "pencil")
                                 }
-                                .tint(.yellow)
+                                .tint(Color("Edit"))
                                 
                             })
                     }
+                    .listRowSeparatorTint(Color(.gray))
                 }
             }
             .alert("This action cannot be undone.", isPresented: $deleteDeckAlert, presenting: deleteTopic, actions: { deleteTopic in
@@ -293,8 +297,11 @@ struct CurrentTopicsView: View {
                         newEditIsPresented = true
                     } label: {
                         HStack {
-                            Image(systemName: "plus.circle")
+                            Image(systemName: "plus.circle.fill")
+                                .resizable()
                                 .font(.body)
+                                .foregroundColor(Color("Theme"))
+                                .frame(width: 30, height: 30)
                         }.padding()
                     }
                     .sheet(isPresented: $newEditIsPresented) {
@@ -330,20 +337,16 @@ struct topicListRow: View {
             HStack {
                 Text("\(topic.emoji) ")
                     .font(.title)
+                    .foregroundColor(Color("Theme"))
                 VStack(alignment: .leading) {
                     Text(topic.name)
-                        .foregroundColor(.black)
                     Text("Completed \(progress)/\(topic.total)")
                         .font(.callout)
-                        .foregroundColor(.gray)
+                        .foregroundColor(Color("Text2"))
                 }
                 Spacer()
                 circularProgress(progress: Double(progress) / Double(topic.total))
                     .frame(height: 30)
-            }
-            if topic.total == 0 {
-                Text("Add cards to enable this deck")
-                    .font(.footnote)
             }
         }
     }
@@ -358,13 +361,13 @@ struct circularProgress: View {
             ZStack{
                 Circle()
                     .stroke(
-                        Color.teal.opacity(0.3),
+                        Color("Theme").opacity(0.3),
                         lineWidth: 8
                     )
                 Circle()
                     .trim(from: 0, to: progress)
                     .stroke(
-                        Color.teal,
+                        Color("Theme"),
                         style: StrokeStyle(
                             lineWidth: 8,
                             lineCap: .round

@@ -45,7 +45,7 @@ struct Card: View {
         VStack {
             ZStack {
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(.teal)
+                    .fill(Color("Theme"))
                 RoundedRectangle(cornerRadius: 20)
                     .strokeBorder(.white, lineWidth: 5)
                     .shadow(color: .black, radius: 10)
@@ -80,18 +80,20 @@ struct Content: View {
                                     .font(.headline)
                                     .fixedSize(horizontal: false, vertical: true)
                                 if let example = definitionArray[index].example {
-                                    Text("\"\(example)\"\n")
+                                    Text("\"\(example)\"")
                                         .italic()
                                         .font(.body)
+                                        .foregroundColor(Color("Text2"))
                                         .fixedSize(horizontal: false, vertical: false)
                                 }
+                                Text("") // space between each definition group
                             }
                         }
                     }
                 }
             }
         }
-        .foregroundColor(.white)
+//        .foregroundColor(.white)
         .padding(30)
     }
 }
