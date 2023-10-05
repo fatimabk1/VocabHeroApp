@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 extension Topic {
-    struct TopicItem: Identifiable, Equatable {
+    struct TopicItem: Identifiable, Equatable, Codable {
         let id: UUID
         let dictionary: Dictionary
         var review: Bool

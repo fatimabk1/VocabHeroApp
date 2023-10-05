@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Topic: Identifiable, Equatable {
+struct Topic: Identifiable, Equatable, Codable {
     // topic details
     var id: UUID
     var name: String
@@ -21,6 +21,28 @@ struct Topic: Identifiable, Equatable {
     var lastShuffledCard: Int = 0
     var lastOrderedCard: Int = 0
     var shuffled: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, emoji, viewedDeck, flashCards, lastShuffledCard, lastOrderedCard, shuffled
+    }
+
+//    required init(from decoder: Decoder) throws {
+//        let values = try decoder.container(keyedBy: CodingKeys.self)
+//        topics = try values.decode([Topic].self, forKey: .topics)
+//    }
+
+//    func encode(to encoder: Encoder) throws {
+//        var container = encoder.container(keyedBy: CodingKeys.self)
+//        try container.encode(UUID, forKey: .id)
+//        try container.encode(String, forKey: .name)
+//        try container.encode(String, forKey: .emoji)
+//        try container.encode(Bool, forKey: .viewedDeck)
+//        try container.encode(TopicItem, forKey: .flashCards)
+//        try container.encode(Int, forKey: .lastShuffledCard)
+//        try container.encode(Int, forKey: .lastShuffledCard)
+//        try container.encode(Int, forKey: .lastOrderedCard)
+//        try container.encode(Bool, forKey: .shuffled)
+//    }
 
     func toStr() -> String {
         var str = "\(emoji) \(name): \(lastOrderedCard) / \(total) completed"

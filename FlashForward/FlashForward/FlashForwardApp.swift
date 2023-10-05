@@ -10,24 +10,28 @@ import SwiftUI
 
 @main
 struct FlashForwardApp: App {
-    @StateObject var manager = TopicManager()
+    @StateObject private var store = Store()
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(manager)
+            CurrentTopicsView() {
+                Task {
+                    do {
+                        try await store.save(manager: store.manager)
+                        } catch {
+                            fatalError(error.localizedDescription)
+                        }
+                }
+            }
+                .environmentObject(store.manager)
+                .task {
+                        do {
+                            try await store.load()
+                        } catch {
+                            fatalError(error.localizedDescription)
+                        }
+                    }
         }
     }
 }
-
-
-//@main
-//struct FlashForwardApp: App {
-//    @StateObject var manager = AManager()
-//    var body: some Scene {
-//        WindowGroup {
-//            Playground()
-//                .environmentObject(manager)
-//        }
-//    }
-//}

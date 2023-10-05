@@ -14,8 +14,7 @@ import SwiftUI
 // Origin
 // MEANINGS  1 & 2, examples 1 & 2
 
-struct Dictionary: Identifiable, Equatable, Hashable {
-
+struct Dictionary: Identifiable, Equatable, Hashable, Codable {
     let id = UUID()
     var word: String
     var definitions: [Definition]
@@ -42,7 +41,7 @@ struct Meaning: Decodable {
     let definitions: [Definition]
 }
 
-struct Definition: Decodable, Equatable {
+struct Definition: Equatable, Codable {
     let definition: String
     let example: String?
 }

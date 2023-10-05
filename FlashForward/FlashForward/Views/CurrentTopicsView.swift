@@ -243,6 +243,8 @@ struct EditDeckListRow: View {
 struct CurrentTopicsView: View {
     @EnvironmentObject var manager: TopicManager
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.scenePhase) private var scenePhase
+    let saveAction: () -> Void
     
     @State var isEditing = false
     @State var newEditIsPresented = false
@@ -259,7 +261,6 @@ struct CurrentTopicsView: View {
                     ZStack {
                         Image("NoDecksEmptyState")
                             .resizable()
-//                            .scaledToFill()
                             .frame(width: 500)
                             .offset(x: 70, y: 50)
                         Text("No decks here.")
@@ -331,6 +332,11 @@ struct CurrentTopicsView: View {
             }
             .navigationTitle("Flashcard Decks")
         }
+        .onChange(of: scenePhase) { phase in
+            if phase == .inactive {
+                saveAction()
+            }
+        }
     }
 }
 
@@ -399,8 +405,24 @@ struct circularProgress: View {
 
 struct CurrentTopicsView_Previews: PreviewProvider {
     static var previews: some View {
-        @StateObject var manager : TopicManager = TopicManager()
-        CurrentTopicsView()
-            .environmentObject(manager)
+        @StateObject var store = Store()
+        
+        CurrentTopicsView() {
+            Task {
+                do {
+                    try await store.save(manager: store.manager)
+                } catch {
+                    fatalError(error.localizedDescription)
+                }
+            }
+        }
+        .environmentObject(store.manager)
+        .task {
+            do {
+                try await store.load()
+            } catch {
+                fatalError(error.localizedDescription)
+            }
+        }
     }
 }
