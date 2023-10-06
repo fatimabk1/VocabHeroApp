@@ -16,6 +16,7 @@ struct TabItem: Identifiable {
 }
 
 struct FlashCardView: View {
+    @Environment(\.colorScheme) var colorScheme
     @Binding var topic: Topic
     @State var tag: Int = 0
     @State var reviewMode = false
@@ -30,7 +31,7 @@ struct FlashCardView: View {
                         let reviewCards = topic.flashCards.filter { $0.review }
                         if reviewCards.count == 0 {
                             ZStack {
-                                Image("NothingToReviewEmptyState")
+                                Image(colorScheme == .dark ? "NothingToReviewDark" : "NothingToReviewLight")
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 500)

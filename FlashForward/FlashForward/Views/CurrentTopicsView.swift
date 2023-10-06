@@ -259,7 +259,7 @@ struct CurrentTopicsView: View {
             Group {
                 if manager.topics.count == 0 {
                     ZStack {
-                        Image("NoDecksEmptyState")
+                        Image(colorScheme == .dark ? "NoDecksDark" : "NoDecksLight")
                             .resizable()
                             .frame(width: 500)
                             .offset(x: 70, y: 50)

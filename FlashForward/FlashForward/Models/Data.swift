@@ -15,7 +15,7 @@ import SwiftUI
 // MEANINGS  1 & 2, examples 1 & 2
 
 struct Dictionary: Identifiable, Equatable, Hashable, Codable {
-    let id = UUID()
+    var id = UUID()
     var word: String
     var definitions: [Definition]
     
