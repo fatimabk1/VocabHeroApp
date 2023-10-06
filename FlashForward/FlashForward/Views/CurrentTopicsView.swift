@@ -212,10 +212,11 @@ struct DisclosureGroupContent: View {
             ForEach(definitionArray.indices, id: \.self) { index in
                 Text("\(index+1). \(definitionArray[index].definition)")
                 if let example = definitionArray[index].example {
-                    Text("\"\(example)\"\n")
+                    Text("\"\(example)\"")
                         .italic()
                         .foregroundColor(Color("Text2"))
                 }
+                Text("")
             }
         }
     }

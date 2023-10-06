@@ -162,13 +162,23 @@ struct flashcardProgressDisplay: View {
     let prog: Int // index of current card
     let total: Int
     
+    func calculateProgress(prog: Int, total: Int) -> Double {
+        var progressIndicatorValue = 0.0
+        if total != 0 {
+            progressIndicatorValue = Double(prog + 1) / Double(total)
+        }
+        return progressIndicatorValue
+    }
+        
     var body: some View {
-        let progressIndicatorValue = Double(prog + 1) / Double(total)
+        let progressIndicatorValue = calculateProgress(prog: prog, total: total)
         ProgressView(value: progressIndicatorValue) {
             HStack{
-                Text("Completed \(prog + 1)/\(total)")
-                Spacer()
-                Text("\(progressIndicatorValue * 100, specifier: "%.0f")%")
+                if total != 0 {
+                    Text("Completed \(prog + 1)/\(total)")
+                    Spacer()
+                    Text("\(progressIndicatorValue * 100, specifier: "%.0f")%")
+                }
             }
         }
         .tint(Color("Theme"))
