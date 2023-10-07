@@ -124,7 +124,7 @@ struct SimpleEditDeckView: View {
                     Section("Flashcards") {
                         AddCardRow(config: $config)
                         ForEach($config.flashcards) { $card in
-                            EditDeckListRow(card: card)
+                            EditDeckListRow(dictionary: card.dictionary)
                                 .swipeActions {
                                     Button(role: .destructive) {
                                         let index = config.flashcards.firstIndex(of: card)
@@ -223,15 +223,15 @@ struct DisclosureGroupContent: View {
 }
 
 struct EditDeckListRow: View {
-    let card: Topic.TopicItem
+    let dictionary: Dictionary
     @State var isExpanded: Bool = false
     
     var body: some View {
         DisclosureGroup(isExpanded: $isExpanded) {
-            let definitionArray = card.dictionary.definitions
+            let definitionArray = dictionary.definitions
             DisclosureGroupContent(definitionArray: definitionArray, isExpanded: $isExpanded)
         } label: {
-            Button(card.dictionary.word.capitalized) {
+            Button(dictionary.word.capitalized) {
                 withAnimation {
                     isExpanded.toggle()
                 }
