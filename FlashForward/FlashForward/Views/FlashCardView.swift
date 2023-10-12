@@ -22,13 +22,13 @@ struct FlashCardView: View {
     @State var reviewMode = false
     @State var reviewProgress = 0 // the index of the current card in the subset of cards for review
     @State var flashCardIndex = 0 // the index of the current card in the full deck shuffled/unshuffled
+    var reviewCards: [Topic.TopicItem] { topic.flashCards.filter { $0.review } }
     
     var body: some View {
         NavigationStack {
             VStack {
                 VTabView(selection: $tag) {
                     if reviewMode {
-                        let reviewCards = topic.flashCards.filter { $0.review }
                         if reviewCards.count == 0 {
                             ZStack {
                                 Image(colorScheme == .dark ? "NothingToReviewDark" : "NothingToReviewLight")
@@ -49,6 +49,11 @@ struct FlashCardView: View {
                             }
                             .onAppear(){
                                 tag = 0 // reviewMode should always start at the beginning
+                            }
+                            // edge case: ensure that unstarring first review card updates view
+                            .onChange(of: reviewCards.count) { count in
+                                flashCardIndex = topic.flashCards.firstIndex(of: reviewCards[tag])!
+                                reviewProgress = tag
                             }
                             .onChange(of: tag) { index in
                                 flashCardIndex = topic.flashCards.firstIndex(of: reviewCards[index])!
@@ -83,13 +88,16 @@ struct FlashCardView: View {
             .navigationTitle("\(topic.name)")
             .navigationBarTitleDisplayMode(.inline)
             HStack {
+                // grab Id to avoid conflict with review vs normal index
                 ShuffleButton(topic: $topic, tag: $tag, index: flashCardIndex)
                     .frame(maxWidth: .infinity)
-                ReviewButton(review: $topic.flashCards[flashCardIndex].review)
+                    .disabled(reviewMode)
+                StarButton(review: $topic.flashCards[flashCardIndex].review, reviewMode: reviewMode)
                     .frame(maxWidth: .infinity)
-                ReviewModeToggle(topic: $topic, reviewMode: $reviewMode)
+                    .disabled(reviewMode && reviewCards.count == 0) // Disable starring on empty state
+                ReviewModeToggle(reviewMode: $reviewMode)
                     .frame(maxWidth: .infinity)
-            }
+            } . padding(.bottom)
         }
         .onAppear {
             topic.viewedDeck = true
@@ -100,12 +108,7 @@ struct FlashCardView: View {
 }
 
 struct ReviewModeToggle: View {
-    @Binding var topic: Topic
     @Binding var reviewMode: Bool
-    
-    var reviewCount: Int {
-        topic.flashCards.filter{$0.review}.count
-    }
     
     var body: some View {
         Button {
@@ -127,8 +130,8 @@ struct ShuffleButton: View {
         Button {
             topic.shuffled.toggle()
             if topic.shuffled {
+                topic.lastOrderedCard = 0 // return user to start of deck when unshuffling
                 // shuffle cards and start user from beginning
-                topic.lastOrderedCard = index // save where we left off in ordered deck
                 topic.flashCards.shuffle()
                 tag = 0
             } else {
@@ -144,12 +147,16 @@ struct ShuffleButton: View {
     }
 }
 
-struct ReviewButton: View {
+struct StarButton: View {
     @Binding var review: Bool
+    let reviewMode: Bool
     
     var body: some View {
         Button {
-            review.toggle()
+            // Don't allow adding non-visible cards while in review mode
+            if (reviewMode && review == true) || !reviewMode {
+                review.toggle()
+            }
         } label: {
             Label("Star", systemImage: review ? "star.fill" : "star")
                 .labelStyle(.titleAndIcon)
@@ -181,7 +188,7 @@ struct flashcardProgressDisplay: View {
                 }
             }
         }
-        .tint(Color("Theme"))
+        .tint(Color("AccentColor"))
     }
 }
 

@@ -15,9 +15,20 @@ import SwiftUI
 // MEANINGS  1 & 2, examples 1 & 2
 
 struct Dictionary: Identifiable, Equatable, Hashable, Codable {
-    var id = UUID()
+    let id = UUID()
     var word: String
     var definitions: [Definition]
+    
+    static var defaultDictionary = Dictionary(word: "Search", definitions: [
+        Definition(definition: "An attempt to find something.", example: "With only five minutes until we were meant to leave, the search for the keys started in earnest."),
+        Definition(definition: "The act of searching in general.", example: "Search is a hard problem for computers to solve efficiently."),
+        Definition(definition: "To look in (a place) for something.", example: "I searched the garden for the keys and found them in the vegetable patch."),
+        Definition(definition: "(followed by \"for\") To look thoroughly.", example: nil),
+        Definition(definition: "The act of defining; determination of the limits.", example: "The police are searching for evidence in his flat."),
+        Definition(definition: "To look for, seek.", example: nil),
+        Definition(definition: "To probe or examine (a wound).", example: nil),
+        Definition(definition: "To examine; to try; to put to the test.", example: nil)
+    ])
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(self.id)
@@ -41,7 +52,8 @@ struct Meaning: Decodable {
     let definitions: [Definition]
 }
 
-struct Definition: Equatable, Codable {
+struct Definition: Identifiable, Equatable, Codable {
+    let id = UUID()
     let definition: String
     let example: String?
 }

@@ -31,7 +31,7 @@ extension Topic {
         }
         
         func toStr() -> String {
-            return "Topic Item: \(self.dictionary.word)"
+            return "Topic Item: (\(self.orderIndex)) \(self.dictionary.word)"
         }
         
         mutating func reset() {

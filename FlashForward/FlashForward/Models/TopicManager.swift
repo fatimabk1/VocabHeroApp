@@ -11,24 +11,27 @@ import SwiftUI
 class TopicManager: Identifiable, ObservableObject, Codable {
     let id = UUID()
     @Published var topics: [Topic]
+    @Published var searchedDictionary: Dictionary
     
     enum CodingKeys: String, CodingKey {
-        case topics
+        case topics, searchedDictionary
     }
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        topics = try values.decode([Topic].self, forKey: .topics)
+        topics = try values.decodeIfPresent([Topic].self, forKey: .topics) ?? []
+        searchedDictionary = try values.decodeIfPresent(Dictionary.self, forKey: .searchedDictionary) ?? Dictionary.defaultDictionary
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(topics, forKey: .topics)
+        try container.encode(searchedDictionary, forKey: .searchedDictionary)
     }
     
     init() {
         self.topics = []
-//        self.topics = [Topic.sampleTopic]
+        searchedDictionary = Dictionary.defaultDictionary
     }
     
     func addSet(_ t: Topic) {

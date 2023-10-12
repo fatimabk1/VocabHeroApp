@@ -19,8 +19,9 @@ struct Config {
     var additions: [Dictionary] = []
     var nextCardIndex: Int {
         let orderIndexArray = flashcards.map { $0.orderIndex }
-        let orderIndex = orderIndexArray.max() ?? 0
-        return (orderIndex > 0) ? (orderIndex + 1) : orderIndex
+        let maxOrderIndex = (orderIndexArray.max() ?? -1)
+        let orderIndex = maxOrderIndex + 1
+        return orderIndex
     }
     
     init(topic: Topic? = nil) {
@@ -88,9 +89,6 @@ struct SimpleEditDeckView: View {
         topic.name = config.name
         topic.emoji = config.emoji
         topic.viewedDeck = config.viewedDeck
-        for d in additions {
-            topic.addFlashCard(dictionary: d)
-        }
         topic.lastOrderedCard = config.lastOrderedCard
         topic.lastShuffledCard = config.lastShuffledCard
         topic.flashCards = config.flashcards
@@ -219,6 +217,7 @@ struct DisclosureGroupContent: View {
                 Text("")
             }
         }
+        .textSelection(.enabled)
     }
 }
 
@@ -244,8 +243,6 @@ struct EditDeckListRow: View {
 struct CurrentTopicsView: View {
     @EnvironmentObject var manager: TopicManager
     @Environment(\.colorScheme) var colorScheme
-    @Environment(\.scenePhase) private var scenePhase
-    let saveAction: () -> Void
     
     @State var isEditing = false
     @State var newEditIsPresented = false
@@ -319,7 +316,7 @@ struct CurrentTopicsView: View {
                             Image(systemName: "plus.circle.fill")
                                 .resizable()
                                 .font(.body)
-                                .foregroundColor(Color("Theme"))
+                                .foregroundColor(Color("AccentColor"))
                                 .frame(width: 30, height: 30)
                         }.padding()
                     }
@@ -332,11 +329,6 @@ struct CurrentTopicsView: View {
                 }
             }
             .navigationTitle("Flashcard Decks")
-        }
-        .onChange(of: scenePhase) { phase in
-            if phase == .inactive {
-                saveAction()
-            }
         }
     }
 }
@@ -385,13 +377,13 @@ struct circularProgress: View {
             ZStack{
                 Circle()
                     .stroke(
-                        Color("Theme").opacity(0.3),
+                        Color("AccentColor").opacity(0.3),
                         lineWidth: 8
                     )
                 Circle()
                     .trim(from: 0, to: progress)
                     .stroke(
-                        Color("Theme"),
+                        Color("AccentColor"),
                         style: StrokeStyle(
                             lineWidth: 8,
                             lineCap: .round
@@ -408,15 +400,7 @@ struct CurrentTopicsView_Previews: PreviewProvider {
     static var previews: some View {
         @StateObject var store = Store()
         
-        CurrentTopicsView() {
-            Task {
-                do {
-                    try await store.save(manager: store.manager)
-                } catch {
-                    fatalError(error.localizedDescription)
-                }
-            }
-        }
+        CurrentTopicsView()
         .environmentObject(store.manager)
         .task {
             do {

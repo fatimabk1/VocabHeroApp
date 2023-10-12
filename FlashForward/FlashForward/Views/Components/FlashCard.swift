@@ -67,6 +67,7 @@ struct Content: View {
             if isFaceUp {
                 Text(content.word)
                     .font(.largeTitle)
+                    .foregroundColor(Color("CardText1"))
                     .fixedSize(horizontal: false, vertical: true)
             } else {
                 VStack(alignment: .leading){
@@ -77,13 +78,14 @@ struct Content: View {
                         if index < definitionArray.count {
                             VStack(alignment: .leading) {
                                 Text("\(index+1). \(definitionArray[index].definition)")
-                                    .font(.headline)
+                                    .font(.body)
+                                    .foregroundColor(Color("CardText1"))
                                     .fixedSize(horizontal: false, vertical: true)
                                 if let example = definitionArray[index].example {
                                     Text("\"\(example)\"")
                                         .italic()
-                                        .font(.body)
-                                        .foregroundColor(Color("Text2"))
+                                        .font(.callout)
+                                        .foregroundColor(Color("CardText2"))
                                         .fixedSize(horizontal: false, vertical: false)
                                 }
                                 Text("") // space between each definition group

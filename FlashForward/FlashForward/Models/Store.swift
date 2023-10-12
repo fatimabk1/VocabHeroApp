@@ -27,11 +27,19 @@ class Store: ObservableObject {
         let task = Task<TopicManager, Error> {
             let fileURL = try Self.fileURL()
             guard let data = try? Data(contentsOf: fileURL) else {
+                print("Store.load(): No data - returning default manager")
+                return TopicManager()
+            }
+                        
+            do {
+                let manager = try JSONDecoder().decode(TopicManager.self, from: data)
+                return manager
+            } catch {
+                print("error: ", error)
                 throw StoreError.corruptedFile
             }
-            let manager = try JSONDecoder().decode(TopicManager.self, from: data)
-            return manager
         }
+        
         let manager = try await task.value
         self.manager = manager
     }
