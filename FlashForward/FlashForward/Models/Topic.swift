@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Topic: Identifiable, Equatable, Codable {
+struct Topic: Identifiable, Equatable, Hashable, Codable {
     // topic details
     var id: UUID
     var name: String
@@ -21,6 +21,13 @@ struct Topic: Identifiable, Equatable, Codable {
     var lastShuffledCard: Int = 0
     var lastOrderedCard: Int = 0
     var shuffled: Bool
+    
+    var nextCardIndex: Int {
+        let orderIndexArray = self.flashCards.map { $0.orderIndex }
+        let maxOrderIndex = (orderIndexArray.max() ?? -1)
+        let orderIndex = maxOrderIndex + 1
+        return orderIndex
+    }
 
     enum CodingKeys: String, CodingKey {
         case id, name, emoji, viewedDeck, flashCards, lastShuffledCard, lastOrderedCard, shuffled
@@ -81,9 +88,9 @@ struct Topic: Identifiable, Equatable, Codable {
 //        return lhs.id == rhs.id
 //    }
     
-//    func hash(into hasher: inout Hasher) {
-//        hasher.combine(id)
-//    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
     
 }
 

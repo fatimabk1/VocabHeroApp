@@ -15,10 +15,10 @@ struct ContentView: View {
     var body: some View {
         TabView {
             Group {
-                SearchView()
-                    .tabItem { Label("Search", systemImage: "magnifyingglass") }
                 CurrentTopicsView()
                     .tabItem { Label("Flashcards", systemImage: "rectangle.stack.fill") }
+                SearchView()
+                    .tabItem { Label("Search", systemImage: "magnifyingglass") }
             }
             .padding(.top)
             .toolbarBackground(Color("AccentColor").opacity(0.1), for: .tabBar)
