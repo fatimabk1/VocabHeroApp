@@ -61,6 +61,16 @@ struct Config {
     }
 }
 
+struct AlertInfo: Identifiable {
+    enum AlertType {
+        case emptyDeck, emptyTitle, emptyEmoji
+    }
+
+    let id: AlertType
+    let title: String
+    let message: String
+}
+
 struct EditDeckView: View {
     @EnvironmentObject var manager: TopicManager
     @Environment(\.dismiss) var dismiss
@@ -74,8 +84,10 @@ struct EditDeckView: View {
     @State var config: Config
     @State var additions: [Dictionary] = []
     @State var newTopic = Topic()
-    @State var emptyDeckAlert = false
-    
+    @State var invalidConfigAlert = false
+    @State var alert: AlertInfo? = nil // hold which alert we need to display
+    @State private var info: AlertInfo?
+        
     init(topic: Binding<Topic>, isPresented: Binding<Bool>, isNewTopic: Bool) {
         _topic = topic
         _config = State(initialValue: Config(topic: topic.wrappedValue))
@@ -85,7 +97,7 @@ struct EditDeckView: View {
     
     func saveConfig(topic: inout Topic, config: inout Config, isNewTopic: Bool){
         topic.name = config.name
-        topic.emoji = config.emoji
+        topic.emoji = (config.emoji == "") ? "" : config.emoji
         topic.viewedDeck = config.viewedDeck
         topic.lastOrderedCard = config.lastOrderedCard
         topic.lastShuffledCard = config.lastShuffledCard
@@ -131,7 +143,7 @@ struct EditDeckView: View {
                                     } label: {
                                         Label("Delete", systemImage: "trash")
                                     }
-                                    .tint(Color("Trash"))
+                                    .tint(.red)
                                 }
                         }
                     }
@@ -142,15 +154,20 @@ struct EditDeckView: View {
                 ToolbarItem(placement: .primaryAction) {
                     Button("Save"){
                         if config.flashcards.count == 0 {
-                            emptyDeckAlert = true
+                            alert = AlertInfo(id: .emptyDeck, title: "Unable to Save Changes", message: "Decks must have at least one flashcard.")
+                        } else if config.name == "" {
+                            alert = AlertInfo(id: .emptyTitle, title: "Unable to Save Changes", message: "Title is required.")
+                        } else if config.emoji == "" || config.emoji == " " {
+                            alert = AlertInfo(id: .emptyEmoji, title: "Unable to Save Changes", message: "Emoji is required.")
                         } else {
                             saveConfig(topic: &topic, config: &config, isNewTopic: isNewTopic)
                             isPresented = false
                             dismiss()
                         }
                     }
-                    .alert(isPresented: $emptyDeckAlert) {
-                        Alert(title: Text("Unable to Save Changes"), message: Text("Decks must have at least one flashcard."))
+                    .foregroundColor(.blue)
+                    .alert(item: $alert) { info in
+                        Alert(title: Text(info.title), message: Text(info.message))
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
@@ -158,7 +175,7 @@ struct EditDeckView: View {
                         isPresented = false
                         dismiss()
                     }
-                    .foregroundColor(Color("Trash"))
+                    .foregroundColor(.red)
                 }
             }
         }

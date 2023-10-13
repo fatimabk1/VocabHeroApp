@@ -9,11 +9,12 @@ import SwiftUI
 
 struct SearchView: View {
     @EnvironmentObject var manager: TopicManager
+    @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
+    
     @State var searchTerm = ""
     @State var failedSearchTerm: String? = nil
     @State var deckSelectionIsPresented = false
-    
     @State var newTopic: Topic = Topic()
     @State var newEditIsPresented = false
     
@@ -40,6 +41,17 @@ struct SearchView: View {
                 Text("No results for \"\(failedSearchTerm)\".")
                     .font(.callout)
                     .foregroundColor(Color("Text2"))
+                ZStack {
+                    Image(colorScheme == .dark ? "NoResultsDark" : "NoResultsLight")
+                        .resizable()
+                        .frame(width: 500)
+                        .offset(x: 70, y: 50)
+                    Text("No results found.")
+                        .font(.title)
+                        .padding()
+                        .fixedSize(horizontal: false, vertical: true)
+                        .offset(x: -50, y: -160)
+                }
                 Spacer()
             } else {
                 let searchedDictionary = manager.searchedDictionary
@@ -47,7 +59,7 @@ struct SearchView: View {
                     HStack {
                         Text(searchedDictionary.word.capitalized(with: .current))
                             .font(.title)
-                            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                            .fontWeight(.bold)
                             .padding()
                         Text(newTopic.toStr()).hidden() // Hack to ensure that sheet value updates on first click
                             .frame(width: 1, height: 1)
@@ -63,6 +75,7 @@ struct SearchView: View {
                             }
                         }
                         .buttonStyle(.borderedProminent)
+                        .tint(Color("ThemeAccent"))
                         .sheet(isPresented: $deckSelectionIsPresented) {
                             MultiSelectAddToDeck(dictionary: searchedDictionary)
                         }
@@ -94,10 +107,6 @@ struct SearchView: View {
                 .padding(.horizontal)
             }
         }
-//        .sheet(isPresented: $newEditIsPresented, content: {
-//            EditDeckView(topic: $newTopic, isPresented: $newEditIsPresented, isNewTopic: true)
-//        })
-
     }
 }
 
@@ -122,6 +131,7 @@ struct MultiSelectAddToDeck: View {
                         }
                 }
             }
+            .navigationTitle("Add \"\(dictionary.word)\"")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel"){
@@ -138,6 +148,7 @@ struct MultiSelectAddToDeck: View {
                             dismiss()
                         }
                     }
+                    .tint(.blue)
                 }
             }
         }
@@ -205,8 +216,8 @@ struct SearchBar: View {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }) {
                     Text("Cancel")
-                        .foregroundStyle(.blue)
                 }
+                .tint(.blue)
                 .padding(.trailing, 10)
                 .transition(.move(edge: .trailing))
             }

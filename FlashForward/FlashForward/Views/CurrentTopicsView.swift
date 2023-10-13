@@ -48,14 +48,14 @@ struct CurrentTopicsView: View {
                                         } label: {
                                             Label("Delete", systemImage: "trash")
                                         }
-                                        .tint(Color("Trash"))
+                                        .tint(.red)
                                         Button(role: .none) {
                                             editTopic = $topic
                                             existingEditIsPresented.toggle()
                                         } label: {
                                             Label("Edit", systemImage: "pencil")
                                         }
-                                        .tint(Color("Edit"))
+                                        .tint(.yellow)
                                         
                                     })
                             }
@@ -85,7 +85,7 @@ struct CurrentTopicsView: View {
                             Image(systemName: "plus.circle.fill")
                                 .resizable()
                                 .font(.body)
-                                .foregroundColor(Color("AccentColor"))
+                                .foregroundColor(Color("ThemeAccent"))
                                 .frame(width: 30, height: 30)
                         }.padding()
                     }
@@ -136,13 +136,13 @@ struct circularProgress: View {
             ZStack{
                 Circle()
                     .stroke(
-                        Color("AccentColor").opacity(0.3),
+                        Color("ThemeAccent").opacity(0.3),
                         lineWidth: 8
                     )
                 Circle()
                     .trim(from: 0, to: progress)
                     .stroke(
-                        Color("AccentColor"),
+                        Color("ThemeAccent"),
                         style: StrokeStyle(
                             lineWidth: 8,
                             lineCap: .round

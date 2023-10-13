@@ -21,9 +21,9 @@ struct ContentView: View {
                     .tabItem { Label("Search", systemImage: "magnifyingglass") }
             }
             .padding(.top)
-            .toolbarBackground(Color("AccentColor").opacity(0.1), for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
         }
+        .tint(Color("TabAccent"))
         .onChange(of: scenePhase) { phase in
             if phase == .inactive {
                 saveAction()

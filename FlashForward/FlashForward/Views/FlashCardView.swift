@@ -188,7 +188,7 @@ struct flashcardProgressDisplay: View {
                 }
             }
         }
-        .tint(Color("AccentColor"))
+        .tint(Color("ThemeAccent"))
     }
 }
 
