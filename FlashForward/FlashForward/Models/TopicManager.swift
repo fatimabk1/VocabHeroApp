@@ -12,6 +12,7 @@ class TopicManager: Identifiable, ObservableObject, Codable {
     let id = UUID()
     @Published var topics: [Topic]
     @Published var searchedDictionary: Dictionary
+    @Published var isLoading: Bool = true
     
     enum CodingKeys: String, CodingKey {
         case topics, searchedDictionary

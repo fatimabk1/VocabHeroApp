@@ -28,6 +28,7 @@ struct FlashForwardApp: App {
             .task {
                     do {
                         try await store.load()
+                        store.manager.isLoading = false
                     } catch {
                         print(error)
                         fatalError(error.localizedDescription)

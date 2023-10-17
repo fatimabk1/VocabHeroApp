@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0849EE262ABDFEB700893EA0 /* VTabView in Frameworks */ = {isa = PBXBuildFile; productRef = 0849EE252ABDFEB700893EA0 /* VTabView */; };
+		08500F6B2ADCC30A00467153 /* AnimateText in Frameworks */ = {isa = PBXBuildFile; productRef = 08500F6A2ADCC30A00467153 /* AnimateText */; };
 		08504D1C2AD7A4DE00B2BBF8 /* EditDeckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08504D1B2AD7A4DE00B2BBF8 /* EditDeckView.swift */; };
 		0886F7652A9078AF00D7E82C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCEF4F2A906D6600160E4E /* ContentView.swift */; };
 		0886F7692A907A3C00D7E82C /* CurrentTopicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886F7682A907A3C00D7E82C /* CurrentTopicsView.swift */; };
@@ -48,6 +49,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0849EE262ABDFEB700893EA0 /* VTabView in Frameworks */,
+				08500F6B2ADCC30A00467153 /* AnimateText in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,6 +151,7 @@
 			name = FlashForward;
 			packageProductDependencies = (
 				0849EE252ABDFEB700893EA0 /* VTabView */,
+				08500F6A2ADCC30A00467153 /* AnimateText */,
 			);
 			productName = FlashForward;
 			productReference = 08DCEF4A2A906D6600160E4E /* FlashForward.app */;
@@ -180,6 +183,7 @@
 			mainGroup = 08DCEF412A906D6600160E4E;
 			packageReferences = (
 				0849EE242ABDFEB700893EA0 /* XCRemoteSwiftPackageReference "swiftui-vertical-tab-view" */,
+				08500F692ADCC30A00467153 /* XCRemoteSwiftPackageReference "AnimateText" */,
 			);
 			productRefGroup = 08DCEF4B2A906D6600160E4E /* Products */;
 			projectDirPath = "";
@@ -433,6 +437,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		08500F692ADCC30A00467153 /* XCRemoteSwiftPackageReference "AnimateText" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jasudev/AnimateText";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -440,6 +452,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0849EE242ABDFEB700893EA0 /* XCRemoteSwiftPackageReference "swiftui-vertical-tab-view" */;
 			productName = VTabView;
+		};
+		08500F6A2ADCC30A00467153 /* AnimateText */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08500F692ADCC30A00467153 /* XCRemoteSwiftPackageReference "AnimateText" */;
+			productName = AnimateText;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
