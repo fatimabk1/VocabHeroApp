@@ -20,7 +20,7 @@ struct ContentView: View {
                 MainView()
             }
             else {
-                LoadingView<ATTwistEffect>(elements: ["Flash Forward"])
+                LoadingView<ATTwistEffect>(elements: ["FlashWise"])
             }
         }
         .onChange(of: manager.isLoading) { loadStatus in
@@ -43,7 +43,7 @@ struct ContentView: View {
 
 struct LoadingView<E: ATTextAnimateEffect>: View {
     // text animation
-    @State var text: String = "FlashForward"
+    @State var text: String = "FlashWise"
     @State var type: ATUnitType = .letters
     @State var userInfo: Any? = nil
     let elements: [String]
