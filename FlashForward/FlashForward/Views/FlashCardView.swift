@@ -44,8 +44,10 @@ struct FlashCardView: View {
                             }
                         } else {
                             ForEach(0..<reviewCards.count, id: \.self) { index in
-                                FlashCard(item: reviewCards[index])
-                                    .tag(reviewCards[index].id)
+                                VStack {
+                                    FlashCard(item: reviewCards[index])
+                                        .tag(index)
+                                }
                             }
                             .onAppear(){
                                 tag = 0 // reviewMode should always start at the beginning
@@ -64,7 +66,7 @@ struct FlashCardView: View {
                         ForEach(0..<topic.total, id: \.self) { index in
                             if (!reviewMode || (reviewMode && topic.flashCards[index].review)){
                                 FlashCard(item: topic.flashCards[index])
-                                    .tag(topic.flashCards[index].id)
+                                    .tag(index)
                             }
                         }
                         .onChange(of: tag) { index in
@@ -80,8 +82,8 @@ struct FlashCardView: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 
-                let total = reviewMode ? topic.flashCards.filter({ $0.review}).count : topic.total
-                let prog = reviewMode ? reviewProgress : flashCardIndex
+                let total = reviewMode ? reviewCards.count : topic.total
+                let prog = (reviewMode ? reviewProgress : flashCardIndex)
                 flashcardProgressDisplay(prog: prog, total: total )
                     .padding(.horizontal)
             }
@@ -171,16 +173,19 @@ struct flashcardProgressDisplay: View {
     
     func calculateProgress(prog: Int, total: Int) -> Double {
         var progressIndicatorValue = 0.0
-        if total != 0 {
+        if prog == total {
+            // catches issue where reviewProgress does not update fast enough when a card is unstarred. Total is correct but prog is one ahead.
+            progressIndicatorValue = 1.0
+        } else if total != 0 {
             progressIndicatorValue = Double(prog + 1) / Double(total)
         }
         return progressIndicatorValue
     }
-        
+
     var body: some View {
         let progressIndicatorValue = calculateProgress(prog: prog, total: total)
         ProgressView(value: progressIndicatorValue) {
-            HStack{
+            HStack {
                 if total != 0 {
                     Text("Completed \(prog + 1)/\(total)")
                     Spacer()

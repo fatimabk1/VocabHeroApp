@@ -131,7 +131,7 @@ struct MultiSelectAddToDeck: View {
                         }
                 }
             }
-            .navigationTitle("Add \"\(dictionary.word)\"")
+            .navigationTitle("Add \"\(dictionary.word.capitalized)\"")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel"){

@@ -65,7 +65,8 @@ struct Content: View {
     var body: some View {
         Group {
             if isFaceUp {
-                Text(content.word)
+                var word = content.word.capitalized(with: .current)
+                Text(word)
                     .font(.largeTitle)
                     .foregroundColor(Color("CardText1"))
                     .fixedSize(horizontal: false, vertical: true)
